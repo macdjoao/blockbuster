@@ -1,3 +1,5 @@
+import uuid
+
 from src.infra.configs.session import session
 from src.infra.entities.models import User as UserEntity
 
@@ -35,6 +37,7 @@ class User:
     def insert(self, email: str, name: str, password: str):
         try:
             data_insert = UserEntity(
+                id=str(uuid.uuid1()),
                 email=email.lower(),
                 name=name.capitalize(),
                 password=password,
