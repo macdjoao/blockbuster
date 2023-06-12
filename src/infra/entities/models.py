@@ -5,7 +5,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'players'
+    __tablename__ = 'users'
 
     id = Column(String, primary_key=True)
     email = Column(String, nullable=False, unique=True)
