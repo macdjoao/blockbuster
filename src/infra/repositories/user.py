@@ -1,6 +1,6 @@
-import uuid
+# import uuid
 
-from passlib.context import CryptContext
+# from passlib.context import CryptContext
 
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
@@ -98,6 +98,24 @@ class User:
             )
 
             return data_update
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
+
+    def delete(self, id: str):
+        try:
+
+            data_delete = (
+                session.query(UserEntity).filter(UserEntity.id == id).first()
+            )
+
+            session.query(UserEntity).filter(UserEntity.id == id).delete()
+            session.commit()
+
+            return data_delete
 
         except Exception as err:
             session.rollback()
