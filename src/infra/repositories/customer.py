@@ -59,3 +59,41 @@ class Customer:
             return err
         finally:
             session.close()
+
+    def update(
+        self,
+        id: str,
+        email: str = None,
+        name: str = None,
+        is_active: bool = None,
+    ):
+        try:
+            if email is not None:
+                # user.update({'email': email.lower()})
+                session.query(CustomerEntity).filter(
+                    CustomerEntity.id == id
+                ).update({'email': email})
+            if name is not None:
+                # user.update({'name': name.capitalize()})
+                session.query(CustomerEntity).filter(
+                    CustomerEntity.id == id
+                ).update({'name': name})
+            if is_active is not None:
+                session.query(CustomerEntity).filter(
+                    CustomerEntity.id == id
+                ).update({'is_active': is_active})
+            session.commit()
+
+            data_update = (
+                session.query(CustomerEntity)
+                .filter(CustomerEntity.id == id)
+                .first()
+            )
+
+            return data_update
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
