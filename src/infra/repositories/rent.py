@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from src.infra.configs.session import session
 from src.infra.entities.rent import Rent as RentEntity
@@ -11,7 +11,7 @@ class Rent:
         user: str,
         customer: str,
         movie: str,
-        devolution_date: datetime,
+        devolution_date: date,
     ):
         # Trechos comentados devem ser implementados em services
         try:
@@ -46,8 +46,8 @@ class Rent:
         user: str = None,
         customer: str = None,
         movie: str = None,
-        rent_date: datetime = None,
-        devolution_date: datetime = None,
+        rent_date: date = None,
+        devolution_date: date = None,
         finished: bool = None,
     ):
         try:
