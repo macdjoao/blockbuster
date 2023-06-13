@@ -35,3 +35,27 @@ class Customer:
             return err
         finally:
             session.close()
+
+    def insert(self, id: str, email: str, name: str):
+        # Trechos comentados devem ser implementados em services
+        try:
+            # data_insert = CustomerEntity(
+            #     id=str(uuid.uuid1()),
+            #     email=email.lower(),
+            #     name=name.capitalize(),
+            # )
+            data_insert = CustomerEntity(
+                id=id,
+                email=email,
+                name=name,
+            )
+            session.add(data_insert)
+            session.commit()
+
+            return data_insert
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
