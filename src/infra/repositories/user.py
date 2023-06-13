@@ -7,6 +7,33 @@ from src.infra.entities.user import User as UserEntity
 
 
 class User:
+    def insert(self, id: str, email: str, name: str, password: str):
+        # Trechos comentados devem ser implementados em services
+        # pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+        try:
+            # data_insert = UserEntity(
+            #     id=str(uuid.uuid1()),
+            #     email=email.lower(),
+            #     name=name.capitalize(),
+            #     password=pwd_context.hash(password),
+            # )
+            data_insert = UserEntity(
+                id=id,
+                email=email,
+                name=name,
+                password=password,
+            )
+            session.add(data_insert)
+            session.commit()
+
+            return data_insert
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
+
     def select(
         self,
         id: str = None,
@@ -32,33 +59,6 @@ class User:
             return data_select
 
         except Exception as err:
-            return err
-        finally:
-            session.close()
-
-    def insert(self, id: str, email: str, name: str, password: str):
-        # Trechos comentados devem ser implementados em services
-        # pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
-        try:
-            # data_insert = UserEntity(
-            #     id=str(uuid.uuid1()),
-            #     email=email.lower(),
-            #     name=name.capitalize(),
-            #     password=pwd_context.hash(password),
-            # )
-            data_insert = UserEntity(
-                id=id,
-                email=email,
-                name=name,
-                password=password,
-            )
-            session.add(data_insert)
-            session.commit()
-
-            return data_insert
-
-        except Exception as err:
-            session.rollback()
             return err
         finally:
             session.close()
