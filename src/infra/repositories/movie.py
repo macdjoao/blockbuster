@@ -40,7 +40,7 @@ class Movie:
                 custom_filter = custom_filter.filter(MovieEntity.name == name)
             if available is not None:
                 custom_filter = custom_filter.filter(
-                    MovieEntity.is_active == available
+                    MovieEntity.available == available
                 )
 
             data_select = custom_filter.all()
