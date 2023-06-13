@@ -25,3 +25,33 @@ class Movie:
             return err
         finally:
             session.close()
+
+    def update(
+        self,
+        id: str,
+        name: str = None,
+        available: bool = None,
+    ):
+        try:
+            if name is not None:
+                # user.update({'name': name.capitalize()})
+                session.query(MovieEntity).filter(MovieEntity.id == id).update(
+                    {'name': name}
+                )
+            if available is not None:
+                session.query(MovieEntity).filter(MovieEntity.id == id).update(
+                    {'is_active': available}
+                )
+            session.commit()
+
+            data_update = (
+                session.query(MovieEntity).filter(MovieEntity.id == id).first()
+            )
+
+            return data_update
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
