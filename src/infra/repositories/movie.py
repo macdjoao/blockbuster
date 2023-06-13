@@ -26,6 +26,32 @@ class Movie:
         finally:
             session.close()
 
+    def select(
+        self,
+        id: str = None,
+        name: str = None,
+        available: bool = None,
+    ):
+        try:
+            custom_filter = session.query(MovieEntity)
+            if id is not None:
+                custom_filter = custom_filter.filter(MovieEntity.id == id)
+            if name is not None:
+                custom_filter = custom_filter.filter(MovieEntity.name == name)
+            if available is not None:
+                custom_filter = custom_filter.filter(
+                    MovieEntity.is_active == available
+                )
+
+            data_select = custom_filter.all()
+
+            return data_select
+
+        except Exception as err:
+            return err
+        finally:
+            session.close()
+
     def update(
         self,
         id: str,
