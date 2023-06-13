@@ -88,6 +88,6 @@ rent = RentRepository()
 # devolution_date = ''
 # rent.insert(id=id, user=user, customer=customer,
 #             movie=movie, devolution_date=devolution_date)
-# print(rent.select(id='', name='', available=True))
+print(rent.select())
 # rent.update(id='', name='', available=False)
 # print(rent.delete(id=''))
