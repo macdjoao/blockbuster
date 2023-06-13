@@ -55,3 +55,21 @@ class Movie:
             return err
         finally:
             session.close()
+
+    def delete(self, id: str):
+        try:
+
+            data_delete = (
+                session.query(MovieEntity).filter(MovieEntity.id == id).first()
+            )
+
+            session.query(MovieEntity).filter(MovieEntity.id == id).delete()
+            session.commit()
+
+            return data_delete
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
