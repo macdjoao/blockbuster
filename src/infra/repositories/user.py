@@ -4,10 +4,20 @@
 
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
+from src.infra.repositories.errors.general import (IncompleteParams,
+                                                   ParamIsNotString)
+from src.infra.repositories.utils.general import (param_is_not_a_string,
+                                                  params_is_none)
 
 
 class User:
-    def insert(self, id: str, email: str, name: str, password: str):
+    def insert(
+        self,
+        id: str = None,
+        email: str = None,
+        name: str = None,
+        password: str = None,
+    ):
         # Trechos comentados devem ser implementados em services
         # pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
         try:
@@ -17,6 +27,11 @@ class User:
             #     name=name.capitalize(),
             #     password=pwd_context.hash(password),
             # )
+            if params_is_none(id, email, name, password):
+                raise IncompleteParams
+            if param_is_not_a_string(id, email, name, password):
+                raise ParamIsNotString
+
             data_insert = UserEntity(
                 id=id,
                 email=email,
@@ -28,9 +43,12 @@ class User:
 
             return data_insert
 
-        except Exception as err:
+        except IncompleteParams as err:
             session.rollback()
-            return err
+            return err.message
+        except ParamIsNotString as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
 
