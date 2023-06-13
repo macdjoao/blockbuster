@@ -4,8 +4,8 @@
 
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
-from src.infra.repositories.errors.general import (IncompleteParams,
-                                                   ParamIsNotString)
+from src.infra.repositories.errors.general import (IncompleteParamsError,
+                                                   ParamIsNotStringError)
 from src.infra.repositories.utils.general import (param_is_not_a_string,
                                                   params_is_none)
 
@@ -28,9 +28,9 @@ class User:
             #     password=pwd_context.hash(password),
             # )
             if params_is_none(id, email, name, password):
-                raise IncompleteParams
+                raise IncompleteParamsError
             if param_is_not_a_string(id, email, name, password):
-                raise ParamIsNotString
+                raise ParamIsNotStringError
 
             data_insert = UserEntity(
                 id=id,
@@ -43,10 +43,10 @@ class User:
 
             return data_insert
 
-        except IncompleteParams as err:
+        except IncompleteParamsError as err:
             session.rollback()
             return err.message
-        except ParamIsNotString as err:
+        except ParamIsNotStringError as err:
             session.rollback()
             return err.message
         finally:
