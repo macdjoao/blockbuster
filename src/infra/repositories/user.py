@@ -3,7 +3,7 @@ import uuid
 from passlib.context import CryptContext
 
 from src.infra.configs.session import session
-from src.infra.entities.models import User as UserEntity
+from src.infra.entities.user import User as UserEntity
 
 
 class User:

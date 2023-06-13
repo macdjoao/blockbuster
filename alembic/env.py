@@ -6,7 +6,11 @@ from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 # New
-from src.infra.entities.models import Base
+from src.infra.configs.base import Base
+from src.infra.entities.customer import Customer
+from src.infra.entities.movie import Movie
+from src.infra.entities.rent import Rent
+from src.infra.entities.user import User
 
 load_dotenv()
 #
