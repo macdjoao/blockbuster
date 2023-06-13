@@ -97,3 +97,25 @@ class Customer:
             return err
         finally:
             session.close()
+
+    def delete(self, id: str):
+        try:
+
+            data_delete = (
+                session.query(CustomerEntity)
+                .filter(CustomerEntity.id == id)
+                .first()
+            )
+
+            session.query(CustomerEntity).filter(
+                CustomerEntity.id == id
+            ).delete()
+            session.commit()
+
+            return data_delete
+
+        except Exception as err:
+            session.rollback()
+            return err
+        finally:
+            session.close()
