@@ -23,7 +23,13 @@ fake = Faker()
 repository = UserRepository()
 # print(repository.select(is_active=False))
 
+id = str(uuid.uuid1())
 email = fake.email()
 name = fake.first_name()
 password = fake.word()
-repository.insert(email=email, name=name, password=password)
+# repository.insert(id=id, email=email, name=name, password=password)
+print(
+    repository.update(
+        id='2ddb8d6e-0a10-11ee-9cad-00155db012cc', email='gilberto@mail'
+    )
+)
