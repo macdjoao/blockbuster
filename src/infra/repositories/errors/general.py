@@ -14,3 +14,10 @@ class ParamIsNotDateError(Exception):
     def __init__(self) -> None:
         super().__init__()
         self.message = 'Error: Param is not a date'
+
+
+class ParamAreNotRecognizedError(Exception):
+    def __init__(self, error_param) -> None:
+        super().__init__()
+        self.error_param = error_param
+        self.message = f'Error: Param "{self.error_param}" is not recognized as a attribute'
