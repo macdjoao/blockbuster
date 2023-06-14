@@ -13,7 +13,7 @@ fake = Faker()
 
 # USER
 
-repository = UserRepository()
+# repository = UserRepository()
 
 # for _ in range(20):
 #     id = str(uuid.uuid1())
@@ -22,13 +22,13 @@ repository = UserRepository()
 #     password = fake.word()
 #     data_insert = user.insert(id=id, email=email, name=name, password=password)
 
-id = str(uuid.uuid1())
-email = fake.email()
-name = fake.first_name()
-password = fake.word()
-print(repository.insert(id=id, email=email, name=name, password=password))
+# id = str(uuid.uuid1())
+# email = fake.email()
+# name = fake.first_name()
+# password = fake.word()
+# print(repository.insert(id=id, email=email, name=name, password=password))
 # print(repository.select(id='', email='', name='', is_active=True))
-# repository.update(id='', email='', name='', password='', is_active=False)
+# print(repository.update(id='', email='', name='', password='', is_active=False))
 # print(repository.delete(id=''))
 
 # CUSTOMER
@@ -69,7 +69,7 @@ print(repository.insert(id=id, email=email, name=name, password=password))
 
 # RENT
 
-# rent = RentRepository()
+rent = RentRepository()
 
 # for _ in range(3):
 #     id = str(uuid.uuid1())
@@ -89,5 +89,10 @@ print(repository.insert(id=id, email=email, name=name, password=password))
 # rent.insert(id=id, user=user, customer=customer,
 #             movie=movie, devolution_date=devolution_date)
 # print(rent.select())
-# rent.update(id='', name='', available=False)
+print(
+    rent.update(
+        id='aac9c3d8-0a22-11ee-8e99-00155db012cc',
+        user='ae34ad96-096c-11ee-9c75-00155db01706',
+    )
+)
 # print(rent.delete(id=''))
