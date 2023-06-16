@@ -26,3 +26,10 @@ def param_is_not_a_recognized_attribute(object, arg):
     if not (hasattr(object, f'{arg}')):
         return True
     return False
+
+
+def id_not_found(session, object, arg):
+    data_update = session.query(object).filter(object.id == arg).first()
+    if data_update is None:
+        return True
+    return False
