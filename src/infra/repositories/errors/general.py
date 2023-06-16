@@ -21,3 +21,10 @@ class ParamAreNotRecognizedError(Exception):
         super().__init__()
         self.error_param = error_param
         self.message = f'Error: Param "{self.error_param}" is not recognized as a attribute'
+
+
+class IdNotFoundError(Exception):
+    def __init__(self, id) -> None:
+        super().__init__()
+        self.id = id
+        self.message = f'Error: Id "{self.id}" not found'
