@@ -2,10 +2,11 @@ from datetime import date
 
 from src.infra.configs.session import session
 from src.infra.entities.rent import Rent as RentEntity
-from src.infra.repositories.errors.general import (IncompleteParamsError,
+from src.infra.repositories.errors.general import (IdNotFoundError,
+                                                   IncompleteParamsError,
                                                    ParamAreNotRecognizedError)
 from src.infra.repositories.utils.general import (
-    param_is_not_a_recognized_attribute, params_is_none)
+    id_not_found, param_is_not_a_recognized_attribute, params_is_none)
 
 
 class Rent:
@@ -93,6 +94,8 @@ class Rent:
         try:
             if params_is_none(id):
                 raise IncompleteParamsError
+            if id_not_found(session=session, object=RentEntity, arg=id):
+                raise IdNotFoundError(id=id)
             for kwarg in kwargs:
                 if param_is_not_a_recognized_attribute(
                     object=rent_entity, arg=kwarg
@@ -107,6 +110,9 @@ class Rent:
             return data_update
 
         except IncompleteParamsError as err:
+            session.rollback()
+            return err.message
+        except IdNotFoundError as err:
             session.rollback()
             return err.message
         except ParamAreNotRecognizedError as err:

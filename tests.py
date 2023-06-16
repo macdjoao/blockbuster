@@ -91,7 +91,7 @@ rent = RentRepository()
 # print(rent.select())
 print(
     rent.update(
-        id='aac9c3d8-0a22-11ee-8e99-00155db012cc',
+        id='aac9c3d8-0a22-11ee-8e99-00155db01',
         user='ae34ad96-096c-11ee-9c75-00155db01706',
     )
 )
