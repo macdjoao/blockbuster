@@ -56,6 +56,16 @@ class Rent:
         devolution_date: date = None,
         finished: bool = None,
     ) -> List[RentEntity]:
+        """
+        Args:
+            id (str)
+            user (str)
+            customer (str)
+            movie (str)
+            rent_date (datetime.datetime(YYYY, M, D))
+            devolution_date (datetime.datetime(YYYY, M, D))
+            finished (bool)
+        """
         try:
             custom_filter = session.query(RentEntity)
             if id is not None:
@@ -92,13 +102,12 @@ class Rent:
 
     def update(self, id: str = None, **kwargs) -> RentEntity:
         """
-        **kwargs(
-            user: str
-            customer: str
-            movie: str
-            devolution_date: datetime.datetime(YYYY, M, D)
-            finished: bool
-        )
+        Args:
+            user (str)
+            customer (str)
+            movie (str)
+            devolution_date (datetime.datetime(YYYY, M, D))
+            finished (bool)
         """
         rent_entity = RentEntity()
         try:
