@@ -1,4 +1,5 @@
 from datetime import date
+from typing import List
 
 from src.infra.configs.session import session
 from src.infra.entities.rent import Rent as RentEntity
@@ -17,7 +18,7 @@ class Rent:
         customer: str,
         movie: str,
         devolution_date: date,
-    ):
+    ) -> RentEntity:
         # Trechos comentados devem ser implementados em services
         try:
             # data_insert = RentEntity(
@@ -54,7 +55,7 @@ class Rent:
         rent_date: date = None,
         devolution_date: date = None,
         finished: bool = None,
-    ):
+    ) -> List[RentEntity]:
         try:
             custom_filter = session.query(RentEntity)
             if id is not None:
@@ -89,7 +90,7 @@ class Rent:
         finally:
             session.close()
 
-    def update(self, id: str = None, **kwargs):
+    def update(self, id: str = None, **kwargs) -> RentEntity:
         """
         **kwargs(
             user: str
