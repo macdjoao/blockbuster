@@ -82,17 +82,17 @@ rent = RentRepository()
 #         id=id, user=user, customer=customer, movie=movie, devolution_date=devolution_date)
 
 # id = str(uuid.uuid1())
-# user = ''
-# customer = ''
-# movie = ''
-# devolution_date = ''
+# user = '8883dc50-0969-11ee-b7ae-00155db01706'
+# customer = '4b59be78-0a20-11ee-8a48-00155db012cc'
+# movie = '520fdc6a-0a21-11ee-91f3-00155db012cc'
+# devolution_date = datetime.datetime(2023, 7, 11)
 # rent.insert(id=id, user=user, customer=customer,
 #             movie=movie, devolution_date=devolution_date)
 # print(rent.select())
 print(
     rent.update(
-        id='aac9c3d8-0a22-11ee-8e99-00155db01',
-        user='ae34ad96-096c-11ee-9c75-00155db01706',
+        id='d521efd4-0a22-11ee-b5a3-00155db012cc',
+        devolution_date=datetime.datetime(2023, 7, 20),
     )
 )
 # print(rent.delete(id=''))

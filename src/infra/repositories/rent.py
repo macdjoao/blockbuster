@@ -90,6 +90,15 @@ class Rent:
             session.close()
 
     def update(self, id: str = None, **kwargs):
+        """
+        **kwargs(
+            user: str
+            customer: str
+            movie: str
+            devolution_date: datetime.datetime(YYYY, M, D)
+            finished: bool
+        )
+        """
         rent_entity = RentEntity()
         try:
             if params_is_none(id):
