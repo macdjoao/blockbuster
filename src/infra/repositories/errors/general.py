@@ -17,6 +17,13 @@ class ParamIsNotDateError(Exception):
         self.message = f'Error: Param {error_param} is not a date'
 
 
+class ParamIsNotBoolError(Exception):
+    def __init__(self, error_param) -> None:
+        super().__init__()
+        self.error_param = error_param
+        self.message = f'Error: Param {error_param} is not a bool'
+
+
 class ParamAreNotRecognizedError(Exception):
     def __init__(self, error_param) -> None:
         super().__init__()
