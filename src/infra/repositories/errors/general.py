@@ -1,19 +1,20 @@
 class IncompleteParamsError(Exception):
     def __init__(self) -> None:
         super().__init__()
-        self.message = 'Error: Incomplete params'
+        self.message = f'Error: Incomplete params'
 
 
 class ParamIsNotStringError(Exception):
     def __init__(self) -> None:
         super().__init__()
-        self.message = 'Error: Param is not a string'
+        self.message = f'Error: Param is not a string'
 
 
 class ParamIsNotDateError(Exception):
-    def __init__(self) -> None:
+    def __init__(self, error_param) -> None:
         super().__init__()
-        self.message = 'Error: Param is not a date'
+        self.error_param = error_param
+        self.message = f'Error: Param {error_param} is not a date'
 
 
 class ParamAreNotRecognizedError(Exception):
