@@ -5,9 +5,12 @@ from src.infra.configs.session import session
 from src.infra.entities.rent import Rent as RentEntity
 from src.infra.repositories.errors.general import (IdNotFoundError,
                                                    IncompleteParamsError,
-                                                   ParamAreNotRecognizedError)
+                                                   ParamAreNotRecognizedError,
+                                                   ParamIsNotDateError,
+                                                   ParamIsNotStringError)
 from src.infra.repositories.utils.general import (
-    id_not_found, param_is_not_a_recognized_attribute, params_is_none)
+    id_not_found, param_is_not_a_date, param_is_not_a_recognized_attribute,
+    param_is_not_a_string, params_is_none)
 
 
 class Rent:
@@ -28,6 +31,14 @@ class Rent:
             #     movie=movie.capitalize(),
             #     devolution_date=devolution_date
             # )
+
+            if params_is_none(id, user, customer, movie, devolution_date):
+                raise IncompleteParamsError
+            if param_is_not_a_string(id, user, customer, movie):
+                raise ParamIsNotStringError
+            if param_is_not_a_date(devolution_date):
+                raise ParamIsNotDateError(error_param=devolution_date)
+
             data_insert = RentEntity(
                 id=id,
                 user=user,
@@ -40,9 +51,15 @@ class Rent:
 
             return data_insert
 
-        except Exception as err:
+        except IncompleteParamsError as err:
             session.rollback()
-            return err
+            return err.message
+        except ParamIsNotStringError as err:
+            session.rollback()
+            return err.message
+        except ParamIsNotDateError as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
 
@@ -106,6 +123,8 @@ class Rent:
         try:
             if params_is_none(id):
                 raise IncompleteParamsError
+            if param_is_not_a_string(id):
+                raise ParamIsNotStringError
             if id_not_found(session=session, object=RentEntity, arg=id):
                 raise IdNotFoundError(id=id)
             for kwarg in kwargs:
@@ -122,6 +141,9 @@ class Rent:
             return data_update
 
         except IncompleteParamsError as err:
+            session.rollback()
+            return err.message
+        except ParamIsNotStringError as err:
             session.rollback()
             return err.message
         except IdNotFoundError as err:
