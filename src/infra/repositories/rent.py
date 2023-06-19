@@ -56,16 +56,6 @@ class Rent:
         devolution_date: date = None,
         finished: bool = None,
     ) -> List[RentEntity]:
-        """
-        Args:
-            id (str)
-            user (str)
-            customer (str)
-            movie (str)
-            rent_date (datetime.datetime(YYYY, M, D))
-            devolution_date (datetime.datetime(YYYY, M, D))
-            finished (bool)
-        """
         try:
             custom_filter = session.query(RentEntity)
             if id is not None:
@@ -135,6 +125,27 @@ class Rent:
             session.rollback()
             return err.message
         except ParamAreNotRecognizedError as err:
+            session.rollback()
+            return err.message
+        finally:
+            session.close()
+
+    def delete(self, id: str) -> RentEntity:
+        try:
+
+            if id_not_found(session=session, object=RentEntity, arg=id):
+                raise IdNotFoundError(id=id)
+
+            data_delete = (
+                session.query(RentEntity).filter(RentEntity.id == id).first()
+            )
+
+            session.query(RentEntity).filter(RentEntity.id == id).delete()
+            session.commit()
+
+            return data_delete
+
+        except IdNotFoundError as err:
             session.rollback()
             return err.message
         finally:
