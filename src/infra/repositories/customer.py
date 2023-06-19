@@ -1,5 +1,10 @@
 from src.infra.configs.session import session
 from src.infra.entities.customer import Customer as CustomerEntity
+from src.infra.repositories.errors.general import (IdNotFoundError,
+                                                   IncompleteParamsError,
+                                                   ParamAreNotRecognizedError)
+from src.infra.repositories.utils.general import (
+    id_not_found, param_is_not_a_recognized_attribute, params_is_none)
 
 
 class Customer:
@@ -60,41 +65,38 @@ class Customer:
         finally:
             session.close()
 
-    def update(
-        self,
-        id: str,
-        email: str = None,
-        name: str = None,
-        is_active: bool = None,
-    ):
-        try:
-            if email is not None:
-                # user.update({'email': email.lower()})
-                session.query(CustomerEntity).filter(
-                    CustomerEntity.id == id
-                ).update({'email': email})
-            if name is not None:
-                # user.update({'name': name.capitalize()})
-                session.query(CustomerEntity).filter(
-                    CustomerEntity.id == id
-                ).update({'name': name})
-            if is_active is not None:
-                session.query(CustomerEntity).filter(
-                    CustomerEntity.id == id
-                ).update({'is_active': is_active})
-            session.commit()
+    def update(self, id: str = None, **kwargs):
 
+        customer_entity = CustomerEntity()
+        try:
+            if params_is_none(id):
+                raise IncompleteParamsError
+            if id_not_found(session=session, object=CustomerEntity, arg=id):
+                raise IdNotFoundError(id=id)
+            for kwarg in kwargs:
+                if param_is_not_a_recognized_attribute(
+                    object=customer_entity, arg=kwarg
+                ):
+                    raise ParamAreNotRecognizedError(error_param=kwarg)
+                session.query(CustomerEntity).filter(
+                    CustomerEntity.id == id
+                ).update({f'{kwarg}': kwargs[f'{kwarg}']})
             data_update = (
                 session.query(CustomerEntity)
                 .filter(CustomerEntity.id == id)
                 .first()
             )
-
             return data_update
 
-        except Exception as err:
+        except IncompleteParamsError as err:
             session.rollback()
-            return err
+            return err.message
+        except IdNotFoundError as err:
+            session.rollback()
+            return err.message
+        except ParamAreNotRecognizedError as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
 

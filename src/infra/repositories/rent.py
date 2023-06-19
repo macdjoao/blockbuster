@@ -83,6 +83,9 @@ class Rent:
 
             data_select = custom_filter.all()
 
+            if data_select == []:
+                return 'No data found'
+
             return data_select
 
         except Exception as err:
