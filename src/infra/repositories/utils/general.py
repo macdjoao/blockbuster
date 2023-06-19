@@ -22,6 +22,13 @@ def param_is_not_a_date(*args):
     return False
 
 
+def param_is_not_a_bool(*args):
+    for arg in args:
+        if not isinstance(arg, bool):
+            return True
+    return False
+
+
 def param_is_not_a_recognized_attribute(object, arg):
     if not (hasattr(object, f'{arg}')):
         return True
