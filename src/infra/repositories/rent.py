@@ -9,8 +9,8 @@ from src.infra.repositories.errors.general import (IdNotFoundError,
                                                    ParamIsNotDateError,
                                                    ParamIsNotStringError)
 from src.infra.repositories.utils.general import (
-    id_not_found, param_is_not_a_date, param_is_not_a_recognized_attribute,
-    param_is_not_a_string, params_is_none)
+    id_not_found, param_is_not_a_bool, param_is_not_a_date,
+    param_is_not_a_recognized_attribute, param_is_not_a_string, params_is_none)
 
 
 class Rent:
@@ -76,24 +76,38 @@ class Rent:
         try:
             custom_filter = session.query(RentEntity)
             if id is not None:
+                if param_is_not_a_string(id):
+                    raise ParamIsNotStringError
                 custom_filter = custom_filter.filter(RentEntity.id == id)
             if user is not None:
+                if param_is_not_a_string(user):
+                    raise ParamIsNotStringError
                 custom_filter = custom_filter.filter(RentEntity.user == user)
             if customer is not None:
+                if param_is_not_a_string(customer):
+                    raise ParamIsNotStringError
                 custom_filter = custom_filter.filter(
                     RentEntity.customer == customer
                 )
             if movie is not None:
+                if param_is_not_a_string(movie):
+                    raise ParamIsNotStringError
                 custom_filter = custom_filter.filter(RentEntity.movie == movie)
             if rent_date is not None:
+                if param_is_not_a_date(rent_date):
+                    raise ParamIsNotDateError(error_param=rent_date)
                 custom_filter = custom_filter.filter(
                     RentEntity.rent_date == rent_date
                 )
             if devolution_date is not None:
+                if param_is_not_a_date(devolution_date):
+                    raise ParamIsNotDateError(error_param=devolution_date)
                 custom_filter = custom_filter.filter(
                     RentEntity.devolution_date == devolution_date
                 )
             if finished is not None:
+                if param_is_not_a_bool(finished):
+                    raise ParamIsNotDateError(error_param=finished)
                 custom_filter = custom_filter.filter(
                     RentEntity.finished == finished
                 )
