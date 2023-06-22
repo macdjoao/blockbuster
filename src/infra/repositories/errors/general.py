@@ -1,27 +1,29 @@
-class IncompleteParamsError(Exception):
-    def __init__(self) -> None:
+class IncompleteParamError(Exception):
+    def __init__(self, arg) -> None:
         super().__init__()
-        self.message = f'Error: Incomplete params'
+        self.arg = arg
+        self.message = f'Error: Incomplete param "{self.arg}"'
 
 
 class ParamIsNotStringError(Exception):
-    def __init__(self) -> None:
+    def __init__(self, arg) -> None:
         super().__init__()
-        self.message = f'Error: Param is not a string'
+        self.arg = arg
+        self.message = f'Error: Param "{self.arg}" must be a string'
 
 
 class ParamIsNotDateError(Exception):
     def __init__(self, error_param) -> None:
         super().__init__()
         self.error_param = error_param
-        self.message = f'Error: Param {error_param} is not a date'
+        self.message = f'Error: Param {error_param} must be a date'
 
 
 class ParamIsNotBoolError(Exception):
     def __init__(self, error_param) -> None:
         super().__init__()
         self.error_param = error_param
-        self.message = f'Error: Param {error_param} is not a bool'
+        self.message = f'Error: Param {error_param} must be a boolean'
 
 
 class ParamAreNotRecognizedError(Exception):
@@ -36,3 +38,17 @@ class IdNotFoundError(Exception):
         super().__init__()
         self.id = id
         self.message = f'Error: Id "{self.id}" not found'
+
+
+class EmailAlreadyRegisteredError(Exception):
+    def __init__(self, email: str) -> None:
+        super().__init__()
+        self.email = email
+        self.message = f'Error: Email "{self.email} is already registered"'
+
+
+class ParamIsNotIntegerError(Exception):
+    def __init__(self, arg) -> None:
+        super().__init__()
+        self.arg = arg
+        self.message = f'Error: Param "{self.arg}" must be a integer'
