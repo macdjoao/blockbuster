@@ -64,7 +64,36 @@ def test_select():
 
 def test_select_ParamIsNotIntegerError():
 
-    fake_id = fake.word()
-    query = customer_repository.select(id=fake_id)
+    fake_not_int_id = fake.word()
+    query = customer_repository.select(id=fake_not_int_id)
 
-    assert query == f'Error: Param "{fake_id}" must be a integer'
+    assert query == f'Error: Param "{fake_not_int_id}" must be a integer'
+
+
+def test_select_ParamIsNotStringError():
+
+    fake_not_string_email = fake.random_digit()
+    wrong_email_query = customer_repository.select(email=fake_not_string_email)
+
+    fake_not_string_first_name = fake.random_digit()
+    wrong_first_name_query = customer_repository.select(
+        email=fake_not_string_first_name
+    )
+
+    fake_not_string_last_name = fake.random_digit()
+    wrong_last_name_query = customer_repository.select(
+        email=fake_not_string_last_name
+    )
+
+    assert (
+        wrong_email_query
+        == f'Error: Param "{fake_not_string_email}" must be a string'
+    )
+    assert (
+        wrong_first_name_query
+        == f'Error: Param "{fake_not_string_first_name}" must be a string'
+    )
+    assert (
+        wrong_last_name_query
+        == f'Error: Param "{fake_not_string_last_name}" must be a string'
+    )
