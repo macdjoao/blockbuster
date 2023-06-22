@@ -44,7 +44,7 @@ class EmailAlreadyRegisteredError(Exception):
     def __init__(self, email: str) -> None:
         super().__init__()
         self.email = email
-        self.message = f'Error: Email "{self.email} is already registered"'
+        self.message = f'Error: Email "{self.email}" is already registered'
 
 
 class ParamIsNotIntegerError(Exception):
