@@ -175,3 +175,6 @@ def test_update():
     # Check equalities
     assert updated_query[0].first_name == new_fake_first_name
     assert updated_query[0].last_name == new_fake_last_name
+
+    # Cleaning DB
+    customer_repository.delete(id=(updated_query[0].id))
