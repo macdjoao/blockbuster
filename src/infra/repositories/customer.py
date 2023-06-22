@@ -110,7 +110,12 @@ class CustomerRepository:
                 raise IncompleteParamError(arg=id)
             if param_is_not_a_int(id):
                 raise ParamIsNotIntegerError(arg=id)
-            if id_not_found(session=session, object=customer_entity, arg=id):
+            data_id = (
+                session.query(CustomerEntity)
+                .filter(CustomerEntity.id == id)
+                .first()
+            )
+            if data_id is None:
                 raise IdNotFoundError(id=id)
             if email is not None:
                 if param_is_not_a_string(email):
