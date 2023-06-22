@@ -18,9 +18,12 @@ customer_entity = CustomerEntity()
 class CustomerRepository:
     def insert(self, email: str, first_name: str, last_name: str):
         try:
-            if email_already_registered(
-                session=session, object=customer_entity, email=email
-            ):
+            data_email = (
+                session.query(CustomerEntity)
+                .filter(CustomerEntity.email == email)
+                .first()
+            )
+            if data_email is not None:
                 raise EmailAlreadyRegisteredError(email=email)
             data_insert = CustomerEntity(
                 email=email.lower(),
@@ -172,21 +175,20 @@ class CustomerRepository:
                 raise IncompleteParamError(arg=id)
             if param_is_not_a_int(id):
                 raise ParamIsNotIntegerError(arg=id)
-            if id_not_found(session=session, object=customer_entity, arg=id):
-                raise IdNotFoundError(id=id)
-
-            data_delete = (
+            data_id = (
                 session.query(CustomerEntity)
                 .filter(CustomerEntity.id == id)
                 .first()
             )
+            if data_id is not None:
+                raise IdNotFoundError(id=id)
 
             session.query(CustomerEntity).filter(
                 CustomerEntity.id == id
             ).delete()
             session.commit()
 
-            return data_delete
+            return data_id
 
         except IncompleteParamError as err:
             session.rollback()
