@@ -1,10 +1,9 @@
 from datetime import date
 
 
-def params_is_none(*args):
-    for arg in args:
-        if arg == None:
-            return True
+def param_is_none(arg):
+    if arg == None:
+        return True
     return False
 
 
@@ -39,4 +38,18 @@ def id_not_found(session, object, arg):
     data_update = session.query(object).filter(object.id == arg).first()
     if data_update is None:
         return True
+    return False
+
+
+def email_already_registered(session, object, email):
+    data = session.query(object).filter(object.email == email).first()
+    if data is None:
+        return True
+    return False
+
+
+def param_is_not_a_int(*args):
+    for arg in args:
+        if not isinstance(arg, int):
+            return True
     return False
