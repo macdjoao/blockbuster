@@ -60,3 +60,11 @@ def test_select():
     assert query[0].first_name == fake_first_name
     assert query[0].last_name == fake_last_name
     assert query[0].is_active == True
+
+
+def test_select_ParamIsNotIntegerError():
+
+    fake_id = fake.word()
+    query = customer_repository.select(id=fake_id)
+
+    assert query == f'Error: Param "{fake_id}" must be a integer'
