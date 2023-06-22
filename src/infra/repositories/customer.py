@@ -75,7 +75,7 @@ class CustomerRepository:
                 )
             if is_active is not None:
                 if param_is_not_a_bool(is_active):
-                    raise ParamIsNotBoolError(error_param=is_active)
+                    raise ParamIsNotBoolError(arg=is_active)
                 custom_filter = custom_filter.filter(
                     CustomerEntity.is_active == is_active
                 )
