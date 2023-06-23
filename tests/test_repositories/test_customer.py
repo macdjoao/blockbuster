@@ -288,4 +288,57 @@ def test_update_ParamIsNotStringError():
     customer_repository.delete(id=(query[0].id))
 
 
+def test_update_EmailAlreadyRegisteredError():
+    # Fake payload
+    fake_email = fake.email()
+    fake_first_name = fake.first_name()
+    fake_last_name = fake.last_name()
+    # Inserting fake registry
+    customer_repository.insert(
+        email=fake_email, first_name=fake_first_name, last_name=fake_last_name
+    )
+
+    # Selecting fake registry
+    query = customer_repository.select(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        is_active=True,
+    )
+
+    # Second fake payload
+    second_fake_email = fake.email()
+    second_fake_first_name = fake.first_name()
+    second_fake_last_name = fake.last_name()
+    # Inserting second fake registry
+    customer_repository.insert(
+        email=second_fake_email,
+        first_name=second_fake_first_name,
+        last_name=second_fake_last_name,
+    )
+
+    # Selecting second fake registry
+    second_query = customer_repository.select(
+        email=second_fake_email,
+        first_name=second_fake_first_name,
+        last_name=second_fake_last_name,
+        is_active=True,
+    )
+
+    # Trying update second fake registry with a email that already exists (first payload's fake_email)
+    already_exists_email = customer_repository.update(
+        id=second_query[0].id, email=fake_email
+    )
+
+    # Checking error
+    assert (
+        already_exists_email
+        == f'Error: Email "{fake_email}" is already registered'
+    )
+
+    # Cleaning DB
+    customer_repository.delete(id=(query[0].id))
+    customer_repository.delete(id=(second_query[0].id))
+
+
 # TODO: remove and remove errors
