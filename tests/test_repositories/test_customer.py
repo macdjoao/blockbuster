@@ -230,17 +230,6 @@ def test_update_ParamIsNotIntegerError():
     assert update == f'Error: Param "{fake_wrong_id}" must be a integer'
 
 
-def test_update_IdNotFoundError():
-    # Fake payload
-    fake_id = 0
-    fake_last_name = fake.last_name()
-    # Trying to update a registry passing an id that does not exist
-    update = customer_repository.update(id=fake_id, last_name=fake_last_name)
-
-    # Checking error
-    assert update == f'Error: Id "{fake_id}" not found'
-
-
 def test_update_ParamIsNotStringError():
     # Fake payload
     fake_email = fake.email()
@@ -286,6 +275,53 @@ def test_update_ParamIsNotStringError():
 
     # Cleaning DB
     customer_repository.delete(id=(query[0].id))
+
+
+def test_update_ParamIsNotBoolError():
+    # Fake payload
+    fake_email = fake.email()
+    fake_first_name = fake.first_name()
+    fake_last_name = fake.last_name()
+    # Inserting fake registry
+    customer_repository.insert(
+        email=fake_email, first_name=fake_first_name, last_name=fake_last_name
+    )
+
+    # Selecting fake registry
+    query = customer_repository.select(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        is_active=True,
+    )
+
+    # Not boolean value
+    not_boolean_value = fake.word()
+
+    # Trying update fake registry with not string value
+    wrong__is_active = customer_repository.update(
+        id=query[0].id, is_active=not_boolean_value
+    )
+
+    # Checking errors
+    assert (
+        wrong__is_active
+        == f'Error: Param {not_boolean_value} must be a boolean'
+    )
+
+    # Cleaning DB
+    customer_repository.delete(id=(query[0].id))
+
+
+def test_update_IdNotFoundError():
+    # Fake payload
+    fake_id = 0
+    fake_last_name = fake.last_name()
+    # Trying to update a registry passing an id that does not exist
+    update = customer_repository.update(id=fake_id, last_name=fake_last_name)
+
+    # Checking error
+    assert update == f'Error: Id "{fake_id}" not found'
 
 
 def test_update_EmailAlreadyRegisteredError():
