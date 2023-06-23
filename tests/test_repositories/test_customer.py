@@ -233,4 +233,14 @@ def test_update_ParamIsNotIntegerError():
     assert update == f'Error: Param "{fake_wrong_id}" must be a integer'
 
 
+def test_update_IdNotFoundError():
+    # Fake payload
+    fake_id = 0
+    fake_last_name = fake.last_name()
+    # Trying to update a registry passing an id that does not exist
+    update = customer_repository.update(id=fake_id, last_name=fake_last_name)
+
+    assert update == f'Error: Id "{fake_id}" not found'
+
+
 # TODO: remove and remove errors
