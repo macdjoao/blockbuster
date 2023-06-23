@@ -189,8 +189,6 @@ class CustomerRepository:
 
     def delete(self, id: int):
         try:
-            if id is None:
-                raise IncompleteParamError(arg=id)
             if type(id) is not int:
                 raise ParamIsNotIntegerError(arg=id)
             data_id = (
@@ -208,9 +206,6 @@ class CustomerRepository:
 
             return data_id
 
-        except IncompleteParamError as err:
-            session.rollback()
-            return err.message
         except ParamIsNotIntegerError as err:
             session.rollback()
             return err.message
