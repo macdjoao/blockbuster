@@ -13,6 +13,13 @@ customer_entity = CustomerEntity()
 class CustomerRepository:
     def insert(self, email: str, first_name: str, last_name: str):
         try:
+            if type(email) is not str:
+                raise ParamIsNotStringError(arg=email)
+            if type(first_name) is not str:
+                raise ParamIsNotStringError(arg=first_name)
+            if type(last_name) is not str:
+                raise ParamIsNotStringError(arg=last_name)
+
             data_email = (
                 session.query(CustomerEntity)
                 .filter(CustomerEntity.email == email)
@@ -20,13 +27,6 @@ class CustomerRepository:
             )
             if data_email is not None:
                 raise EmailAlreadyRegisteredError(email=email)
-
-            if type(email) is not str:
-                raise ParamIsNotStringError(arg=email)
-            if type(first_name) is not str:
-                raise ParamIsNotStringError(arg=first_name)
-            if type(last_name) is not str:
-                raise ParamIsNotStringError(arg=last_name)
 
             data_insert = CustomerEntity(
                 email=email.lower(),
