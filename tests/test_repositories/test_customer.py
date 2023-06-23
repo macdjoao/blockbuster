@@ -58,6 +58,47 @@ def test_insert_EmailAlreadyRegisteredError():
     customer_repository.delete(id=(query[0].id))
 
 
+def test_insert_ParamIsNotStringError():
+    # Fake valid values
+    fake_email = fake.email()
+    fake_first_name = fake.first_name()
+    fake_last_name = fake.last_name()
+
+    # Setting a not string value
+    fake_not_string = fake.random_digit()
+
+    # Trying to insert by passing a not string value as email
+    wrong_email_insert = customer_repository.insert(
+        email=fake_not_string,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+    )
+
+    # Trying to insert by passing a not string value as first_name
+    wrong_first_name_insert = customer_repository.insert(
+        email=fake_email, first_name=fake_not_string, last_name=fake_last_name
+    )
+
+    # Trying to insert by passing a not string value as last_name
+    wrong_last_name_insert = customer_repository.insert(
+        email=fake_email, first_name=fake_first_name, last_name=fake_not_string
+    )
+
+    # Checking errors
+    assert (
+        wrong_email_insert
+        == f'Error: Param "{fake_not_string}" must be a string'
+    )
+    assert (
+        wrong_first_name_insert
+        == f'Error: Param "{fake_not_string}" must be a string'
+    )
+    assert (
+        wrong_last_name_insert
+        == f'Error: Param "{fake_not_string}" must be a string'
+    )
+
+
 def test_select():
     # Fake payload
     fake_email = fake.email()
