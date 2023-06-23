@@ -377,4 +377,34 @@ def test_update_EmailAlreadyRegisteredError():
     customer_repository.delete(id=(second_query[0].id))
 
 
-# TODO: remove and remove errors
+def test_delete():
+    # Fake payload
+    fake_email = fake.email()
+    fake_first_name = fake.first_name()
+    fake_last_name = fake.last_name()
+    # Inserting fake
+    customer_repository.insert(
+        email=fake_email, first_name=fake_first_name, last_name=fake_last_name
+    )
+
+    # Selecting fake registry
+    query = customer_repository.select(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        is_active=True,
+    )
+
+    # Deleting fake registry
+    customer_repository.delete(id=(query[0].id))
+
+    # Trying to select deleted fake registry
+    delete_query = customer_repository.select(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        is_active=True,
+    )
+
+    # Checking if registry is really deleted
+    assert delete_query == []
