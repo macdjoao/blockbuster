@@ -169,9 +169,6 @@ class CustomerRepository:
             )
             return data_update
 
-        except IncompleteParamError as err:
-            session.rollback()
-            return err.message
         except ParamIsNotIntegerError as err:
             session.rollback()
             return err.message
