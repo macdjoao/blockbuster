@@ -2,7 +2,6 @@ from src.infra.configs.session import session
 from src.infra.entities.customer import Customer as CustomerEntity
 from src.infra.repositories.errors.general import (EmailAlreadyRegisteredError,
                                                    IdNotFoundError,
-                                                   IncompleteParamError,
                                                    ParamIsNotBoolError,
                                                    ParamIsNotIntegerError,
                                                    ParamIsNotStringError)
