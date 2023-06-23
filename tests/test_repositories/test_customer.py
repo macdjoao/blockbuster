@@ -415,7 +415,17 @@ def test_delete_ParamIsNotIntegerError():
     # Fake wrong type id
     fake_wrong_id = fake.word()
     # Trying to delete a registry by passing a not integer id
-    delete = customer_repository.update(id=fake_wrong_id)
+    delete = customer_repository.delete(id=fake_wrong_id)
 
     # Checking error
     assert delete == f'Error: Param "{fake_wrong_id}" must be a integer'
+
+
+def test_delete_IdNotFoundError():
+    # Fake payload
+    fake_id = 0
+    # Trying to delete a registry passing an id that does not exist
+    delete = customer_repository.delete(id=fake_id)
+
+    # Checking error
+    assert delete == f'Error: Id "{fake_id}" not found'
