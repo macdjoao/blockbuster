@@ -227,6 +227,7 @@ def test_update_ParamIsNotIntegerError():
     # Trying to update a registry by passing a not integer id
     update = customer_repository.update(id=fake_wrong_id)
 
+    # Checking error
     assert update == f'Error: Param "{fake_wrong_id}" must be a integer'
 
 
@@ -295,7 +296,7 @@ def test_update_ParamIsNotBoolError():
         is_active=True,
     )
 
-    # Not boolean value
+    # Setting a not boolean value
     not_boolean_value = fake.word()
 
     # Trying update fake registry with not string value
@@ -408,3 +409,13 @@ def test_delete():
 
     # Checking if registry is really deleted
     assert delete_query == []
+
+
+def test_delete_ParamIsNotIntegerError():
+    # Fake wrong type id
+    fake_wrong_id = fake.word()
+    # Trying to delete a registry by passing a not integer id
+    delete = customer_repository.update(id=fake_wrong_id)
+
+    # Checking error
+    assert delete == f'Error: Param "{fake_wrong_id}" must be a integer'
