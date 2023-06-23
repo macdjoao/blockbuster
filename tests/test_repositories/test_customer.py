@@ -219,3 +219,18 @@ def test_update():
 
     # Cleaning DB
     customer_repository.delete(id=(updated_query[0].id))
+
+
+# TODO: update errors
+
+
+def test_update_ParamIsNotIntegerError():
+    # Fake wrong type id
+    fake_wrong_id = fake.word()
+    # Trying to update a registry by passing a not integer id
+    update = customer_repository.update(id=fake_wrong_id)
+
+    assert update == f'Error: Param "{fake_wrong_id}" must be a integer'
+
+
+# TODO: remove and remove errors
