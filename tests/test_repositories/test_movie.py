@@ -53,3 +53,13 @@ def test_select():
 
     # Cleaning DB
     movie_repository.delete(id=(query[0].id))
+
+
+def test_select_ParamIsNotIntegerError():
+    # Setting a not integer id
+    fake_not_int_id = fake.word()
+    # Trying to select a customer by passing a not integer as id
+    query = movie_repository.select(id=fake_not_int_id)
+
+    # Checking error
+    assert query == f'Error: Param "{fake_not_int_id}" must be a integer'
