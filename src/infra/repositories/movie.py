@@ -1,18 +1,14 @@
 from src.infra.configs.session import session
 from src.infra.entities.movie import Movie as MovieEntity
+from src.infra.repositories.errors.general import ParamIsNotStringError
 
 
 class Movie:
-    def insert(self, id: str, name: str):
-        # Trechos comentados devem ser implementados em services
+    def insert(self, name: str):
         try:
-            # data_insert = MovieEntity(
-            #     id=str(uuid.uuid1()),
-            #     email=email.lower(),
-            #     name=name.capitalize(),
-            # )
+            if type(name) is not str:
+                raise ParamIsNotStringError(arg=name)
             data_insert = MovieEntity(
-                id=id,
                 name=name,
             )
             session.add(data_insert)
@@ -20,9 +16,9 @@ class Movie:
 
             return data_insert
 
-        except Exception as err:
+        except ParamIsNotStringError as err:
             session.rollback()
-            return err
+            return err.message
         finally:
             session.close()
 
