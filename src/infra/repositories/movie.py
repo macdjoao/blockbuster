@@ -10,12 +10,12 @@ class MovieRepository:
         try:
             if type(name) is not str:
                 raise ParamIsNotStringError(arg=name)
+
             data_insert = MovieEntity(
                 name=name,
             )
             session.add(data_insert)
             session.commit()
-
             return data_insert
 
         except ParamIsNotStringError as err:
@@ -32,14 +32,17 @@ class MovieRepository:
     ):
         try:
             custom_filter = session.query(MovieEntity)
+
             if id is not None:
                 if type(id) is not int:
                     raise ParamIsNotIntegerError(arg=id)
                 custom_filter = custom_filter.filter(MovieEntity.id == id)
+
             if name is not None:
                 if type(name) is not str:
                     raise ParamIsNotStringError(arg=name)
                 custom_filter = custom_filter.filter(MovieEntity.name == name)
+
             if available is not None:
                 if type(available) is not bool:
                     raise ParamIsNotBoolError(arg=available)
@@ -48,7 +51,6 @@ class MovieRepository:
                 )
 
             data_select = custom_filter.all()
-
             return data_select
 
         except ParamIsNotIntegerError as err:
@@ -67,26 +69,39 @@ class MovieRepository:
         available: bool = None,
     ):
         try:
+            if type(id) is not int:
+                raise ParamIsNotIntegerError(arg=id)
+
             if name is not None:
-                # user.update({'name': name.capitalize()})
+                if type(name) is not str:
+                    raise ParamIsNotStringError(arg=name)
                 session.query(MovieEntity).filter(MovieEntity.id == id).update(
                     {'name': name}
                 )
+
             if available is not None:
+                if type(available) is not bool:
+                    raise ParamIsNotBoolError(arg=available)
                 session.query(MovieEntity).filter(MovieEntity.id == id).update(
                     {'is_active': available}
                 )
+
             session.commit()
 
             data_update = (
                 session.query(MovieEntity).filter(MovieEntity.id == id).first()
             )
-
             return data_update
 
-        except Exception as err:
+        except ParamIsNotIntegerError as err:
             session.rollback()
-            return err
+            return err.message
+        except ParamIsNotStringError as err:
+            session.rollback()
+            return err.message
+        except ParamIsNotBoolError as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
 
