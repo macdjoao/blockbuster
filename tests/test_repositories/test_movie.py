@@ -120,3 +120,25 @@ def test_update_ParamIsNotIntegerError():
 
     # Checking error
     assert update == f'Error: Param "{fake_wrong_id}" must be a integer'
+
+
+def test_update_ParamIsNotStringError():
+    # Fake payload
+    fake_name = fake.word()
+    # Inserting fake registry
+    movie_repository.insert(name=fake_name)
+
+    # Selecting fake registry
+    query = movie_repository.select(name=fake_name)
+
+    # Not string value
+    not_string_value = fake.random_digit()
+
+    # Trying update fake registry with not string value
+    wrong_name = movie_repository.update(id=query[0].id, name=not_string_value)
+
+    # Checking errors
+    assert wrong_name == f'Error: Param "{not_string_value}" must be a string'
+
+    # Cleaning DB
+    movie_repository.delete(id=(query[0].id))
