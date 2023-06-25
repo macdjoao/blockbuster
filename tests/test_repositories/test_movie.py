@@ -180,3 +180,22 @@ def test_update_IdNotFoundError():
 
     # Checking error
     assert update == f'Error: Id "{fake_id}" not found'
+
+
+def test_delete():
+    # Fake payload
+    fake_name = fake.name()
+    # Inserting fake
+    movie_repository.insert(name=fake_name)
+
+    # Selecting fake registry
+    query = movie_repository.select(name=fake_name)
+
+    # Deleting fake registry
+    movie_repository.delete(id=(query[0].id))
+
+    # Trying to select deleted fake registry
+    delete_query = movie_repository.select(name=fake_name)
+
+    # Checking if registry is really deleted
+    assert delete_query == []
