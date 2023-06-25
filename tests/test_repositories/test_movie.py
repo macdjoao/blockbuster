@@ -142,3 +142,30 @@ def test_update_ParamIsNotStringError():
 
     # Cleaning DB
     movie_repository.delete(id=(query[0].id))
+
+
+def test_update_ParamIsNotBoolError():
+    # Fake payload
+    fake_name = fake.word()
+    # Inserting fake registry
+    movie_repository.insert(name=fake_name)
+
+    # Selecting fake registry
+    query = movie_repository.select(name=fake_name)
+
+    # Setting a not boolean value
+    not_boolean_value = fake.word()
+
+    # Trying update fake registry with not string value
+    wrong_available = movie_repository.update(
+        id=query[0].id, available=not_boolean_value
+    )
+
+    # Checking errors
+    assert (
+        wrong_available
+        == f'Error: Param {not_boolean_value} must be a boolean'
+    )
+
+    # Cleaning DB
+    movie_repository.delete(id=(query[0].id))
