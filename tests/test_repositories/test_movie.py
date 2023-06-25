@@ -36,3 +36,20 @@ def test_insert_ParamIsNotStringError():
         wrong_name_insert
         == f'Error: Param "{fake_not_string}" must be a string'
     )
+
+
+def test_select():
+    # Fake payload
+    fake_name = fake.word()
+    # Inserting fake
+    movie_repository.insert(name=fake_name)
+
+    # Selecting fake registry
+    query = movie_repository.select(name=fake_name, available=True)
+
+    # Checking equalities
+    assert query[0].name == fake_name
+    assert query[0].available == True
+
+    # Cleaning DB
+    movie_repository.delete(id=(query[0].id))
