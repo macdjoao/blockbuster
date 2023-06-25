@@ -110,3 +110,13 @@ def test_update():
 
     # Cleaning DB
     movie_repository.delete(id=(updated_query[0].id))
+
+
+def test_update_ParamIsNotIntegerError():
+    # Fake wrong type id
+    fake_wrong_id = fake.word()
+    # Trying to update a registry by passing a not integer id
+    update = movie_repository.update(id=fake_wrong_id)
+
+    # Checking error
+    assert update == f'Error: Param "{fake_wrong_id}" must be a integer'
