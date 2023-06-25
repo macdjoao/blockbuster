@@ -76,3 +76,13 @@ def test_select_ParamIsNotStringError():
         wrong_name_query
         == f'Error: Param "{fake_not_string_name}" must be a string'
     )
+
+
+def test_select_ParamIsNotBoolError():
+    # Setting a not boolean is_active
+    fake_not_bool_available = fake.word()
+    # Trying to select a customer by passing a not boolean as available
+    query = movie_repository.select(available=fake_not_bool_available)
+
+    # Checking errors
+    assert query == f'Error: Param {fake_not_bool_available} must be a boolean'
