@@ -169,3 +169,14 @@ def test_update_ParamIsNotBoolError():
 
     # Cleaning DB
     movie_repository.delete(id=(query[0].id))
+
+
+def test_update_IdNotFoundError():
+    # Fake payload
+    fake_id = 0
+    fake_name = fake.word()
+    # Trying to update a registry passing an id that does not exist
+    update = movie_repository.update(id=fake_id, name=fake_name)
+
+    # Checking error
+    assert update == f'Error: Id "{fake_id}" not found'
