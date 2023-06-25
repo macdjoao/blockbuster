@@ -1,6 +1,8 @@
 from src.infra.configs.session import session
 from src.infra.entities.movie import Movie as MovieEntity
-from src.infra.repositories.errors.general import ParamIsNotStringError
+from src.infra.repositories.errors.general import (ParamIsNotBoolError,
+                                                   ParamIsNotIntegerError,
+                                                   ParamIsNotStringError)
 
 
 class MovieRepository:
@@ -31,10 +33,16 @@ class MovieRepository:
         try:
             custom_filter = session.query(MovieEntity)
             if id is not None:
+                if type(id) is not int:
+                    raise ParamIsNotIntegerError(arg=id)
                 custom_filter = custom_filter.filter(MovieEntity.id == id)
             if name is not None:
+                if type(name) is not str:
+                    raise ParamIsNotStringError(arg=name)
                 custom_filter = custom_filter.filter(MovieEntity.name == name)
             if available is not None:
+                if type(available) is not bool:
+                    raise ParamIsNotBoolError(arg=available)
                 custom_filter = custom_filter.filter(
                     MovieEntity.available == available
                 )
@@ -43,8 +51,12 @@ class MovieRepository:
 
             return data_select
 
-        except Exception as err:
-            return err
+        except ParamIsNotIntegerError as err:
+            return err.message
+        except ParamIsNotStringError as err:
+            return err.message
+        except ParamIsNotBoolError as err:
+            return err.message
         finally:
             session.close()
 
