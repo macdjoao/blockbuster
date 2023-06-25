@@ -86,3 +86,27 @@ def test_select_ParamIsNotBoolError():
 
     # Checking errors
     assert query == f'Error: Param {fake_not_bool_available} must be a boolean'
+
+
+def test_update():
+    # Fake payload
+    fake_name = fake.word()
+    # Inserting fake registry
+    movie_repository.insert(name=fake_name)
+
+    # Selecting fake registry
+    query = movie_repository.select(name=fake_name)
+
+    # Second fake payload
+    new_fake_name = fake.word()
+    # Update fake registry with second fake payload parameters
+    movie_repository.update(id=query[0].id, name=new_fake_name)
+
+    # Selecting updated fake registry
+    updated_query = movie_repository.select(id=query[0].id)
+
+    # Check equalities
+    assert updated_query[0].name == new_fake_name
+
+    # Cleaning DB
+    movie_repository.delete(id=(updated_query[0].id))
