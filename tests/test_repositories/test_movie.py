@@ -199,3 +199,13 @@ def test_delete():
 
     # Checking if registry is really deleted
     assert delete_query == []
+
+
+def test_delete_ParamIsNotIntegerError():
+    # Fake wrong type id
+    fake_wrong_id = fake.word()
+    # Trying to delete a registry by passing a not integer id
+    delete = movie_repository.delete(id=fake_wrong_id)
+
+    # Checking error
+    assert delete == f'Error: Param "{fake_wrong_id}" must be a integer'
