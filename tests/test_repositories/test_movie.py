@@ -63,3 +63,16 @@ def test_select_ParamIsNotIntegerError():
 
     # Checking error
     assert query == f'Error: Param "{fake_not_int_id}" must be a integer'
+
+
+def test_select_ParamIsNotStringError():
+    # Setting a not string name
+    fake_not_string_name = fake.random_digit()
+    # Trying to select a customer by passing a not string as name
+    wrong_name_query = movie_repository.select(name=fake_not_string_name)
+
+    # Checking errors
+    assert (
+        wrong_name_query
+        == f'Error: Param "{fake_not_string_name}" must be a string'
+    )
