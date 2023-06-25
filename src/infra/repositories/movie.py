@@ -1,6 +1,7 @@
 from src.infra.configs.session import session
 from src.infra.entities.movie import Movie as MovieEntity
-from src.infra.repositories.errors.general import (ParamIsNotBoolError,
+from src.infra.repositories.errors.general import (IdNotFoundError,
+                                                   ParamIsNotBoolError,
                                                    ParamIsNotIntegerError,
                                                    ParamIsNotStringError)
 
@@ -71,6 +72,11 @@ class MovieRepository:
         try:
             if type(id) is not int:
                 raise ParamIsNotIntegerError(arg=id)
+            data_id = (
+                session.query(MovieEntity).filter(MovieEntity.id == id).first()
+            )
+            if data_id is None:
+                raise IdNotFoundError(id=id)
 
             if name is not None:
                 if type(name) is not str:
@@ -94,6 +100,9 @@ class MovieRepository:
             return data_update
 
         except ParamIsNotIntegerError as err:
+            session.rollback()
+            return err.message
+        except IdNotFoundError as err:
             session.rollback()
             return err.message
         except ParamIsNotStringError as err:
