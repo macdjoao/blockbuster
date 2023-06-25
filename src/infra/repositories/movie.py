@@ -3,7 +3,7 @@ from src.infra.entities.movie import Movie as MovieEntity
 from src.infra.repositories.errors.general import ParamIsNotStringError
 
 
-class Movie:
+class MovieRepository:
     def insert(self, name: str):
         try:
             if type(name) is not str:
