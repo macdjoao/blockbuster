@@ -27,7 +27,7 @@ class MovieRepository:
 
     def select(
         self,
-        id: str = None,
+        id: int = None,
         name: str = None,
         available: bool = None,
     ):
@@ -65,7 +65,7 @@ class MovieRepository:
 
     def update(
         self,
-        id: str,
+        id: int,
         name: str = None,
         available: bool = None,
     ):
@@ -114,20 +114,27 @@ class MovieRepository:
         finally:
             session.close()
 
-    def delete(self, id: str):
+    def delete(self, id: int):
         try:
 
-            data_delete = (
+            if type(id) is not int:
+                raise ParamIsNotIntegerError(arg=id)
+
+            data_id = (
                 session.query(MovieEntity).filter(MovieEntity.id == id).first()
             )
+            if data_id is None:
+                raise IdNotFoundError(id=id)
 
             session.query(MovieEntity).filter(MovieEntity.id == id).delete()
             session.commit()
+            return data_id
 
-            return data_delete
-
-        except Exception as err:
+        except ParamIsNotIntegerError as err:
             session.rollback()
-            return err
+            return err.message
+        except IdNotFoundError as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
