@@ -121,3 +121,26 @@ def test_insert_ParamIsNotIntegerError():
         wrong_customer_id == f'Error: Param "{fake_not_int}" must be a integer'
     )
     assert wrong_movie_id == f'Error: Param "{fake_not_int}" must be a integer'
+
+
+def test_insert_ParamIsNotDateError():
+    # Setting a valid inputs values
+    fake_user_id = fake.random_digit()
+    fake_customer_id = fake.random_digit()
+    fake_movie_id = fake.random_digit()
+
+    # Setting a not date devolution date
+    fake_devolution_date = fake.word()
+
+    # Trying to insert a rent by passing a not date as devolution date
+    wrong_date = rent_repository.select(
+        user_id=fake_user_id,
+        customer_id=fake_customer_id,
+        movie_id=fake_movie_id,
+        devolution_date=fake_devolution_date,
+    )
+
+    # Checking error
+    assert (
+        wrong_date == f'Error: Param "{fake_devolution_date}" must be a date'
+    )
