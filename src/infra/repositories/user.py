@@ -106,32 +106,64 @@ class UserRepository:
 
     def update(
         self,
-        id: str,
+        id: int,
         email: str = None,
-        name: str = None,
+        first_name: str = None,
+        last_name: str = None,
         password: str = None,
         is_active: bool = None,
     ):
         try:
+            if type(id) is not int:
+                raise ParamIsNotIntegerError(arg=id)
+            data_id = (
+                session.query(UserEntity).filter(UserEntity.id == id).first()
+            )
+            if data_id is None:
+                raise IdNotFoundError(id=id)
+
             if email is not None:
-                # user.update({'email': email.lower()})
+                if type(email) is not str:
+                    raise ParamIsNotStringError(arg=email)
+                data_email = (
+                    session.query(UserEntity)
+                    .filter(UserEntity.email == email)
+                    .first()
+                )
+                if data_email is not None:
+                    raise EmailAlreadyRegisteredError(email=email)
                 session.query(UserEntity).filter(UserEntity.id == id).update(
                     {'email': email}
                 )
-            if name is not None:
-                # user.update({'name': name.capitalize()})
+
+            if first_name is not None:
+                if type(first_name) is not str:
+                    raise ParamIsNotStringError(arg=first_name)
                 session.query(UserEntity).filter(UserEntity.id == id).update(
-                    {'name': name}
+                    {'first_name': first_name}
                 )
+
+            if last_name is not None:
+                if type(last_name) is not str:
+                    raise ParamIsNotStringError(arg=last_name)
+                session.query(UserEntity).filter(UserEntity.id == id).update(
+                    {'last_name': last_name}
+                )
+
             if password is not None:
-                # user.update({'password': pwd_context.hash(password)})
+                if type(password) is not str:
+                    raise ParamIsNotStringError(arg=password)
                 session.query(UserEntity).filter(UserEntity.id == id).update(
                     {'password': password}
                 )
+
             if is_active is not None:
+                if type(is_active) is not bool:
+                    raise ParamIsNotBoolError(arg=is_active)
                 session.query(UserEntity).filter(UserEntity.id == id).update(
                     {'is_active': is_active}
                 )
+
             session.commit()
 
             data_update = (
@@ -140,9 +172,21 @@ class UserRepository:
 
             return data_update
 
-        except Exception as err:
+        except ParamIsNotIntegerError as err:
             session.rollback()
-            return err
+            return err.message
+        except IdNotFoundError as err:
+            session.rollback()
+            return err.message
+        except ParamIsNotStringError as err:
+            session.rollback()
+            return err.message
+        except EmailAlreadyRegisteredError as err:
+            session.rollback()
+            return err.message
+        except ParamIsNotBoolError as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
 
