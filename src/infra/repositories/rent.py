@@ -2,44 +2,63 @@ from datetime import date
 from typing import List
 
 from src.infra.configs.session import session
+from src.infra.entities.customer import Customer as CustomerEntity
+from src.infra.entities.movie import Movie as MovieEntity
 from src.infra.entities.rent import Rent as RentEntity
+from src.infra.entities.user import User as UserEntity
 from src.infra.repositories.errors.common import (IdNotFoundError,
                                                   ParamAreNotRecognizedError,
                                                   ParamIsNotDateError,
+                                                  ParamIsNotIntegerError,
                                                   ParamIsNotStringError)
 
 
-class Rent:
+class RentRepository:
     def insert(
         self,
-        id: str,
-        user: str,
-        customer: str,
-        movie: str,
+        user_id: int,
+        customer_id: int,
+        movie_id: int,
         devolution_date: date,
     ) -> RentEntity:
-        # Trechos comentados devem ser implementados em services
         try:
-            # data_insert = RentEntity(
-            #     id=str(uuid.uuid1()),
-            #     user=user.capitalize(),
-            #     customer=customer.capitalize(),
-            #     movie=movie.capitalize(),
-            #     devolution_date=devolution_date
-            # )
+            if type(user_id) is not int:
+                raise ParamIsNotIntegerError(arg=user_id)
+            if type(customer_id) is not int:
+                raise ParamIsNotIntegerError(arg=customer_id)
+            if type(movie_id) is not int:
+                raise ParamIsNotIntegerError(arg=movie_id)
+            if type(devolution_date) is not date:
+                raise ParamIsNotDateError(arg=devolution_date)
 
-            if params_is_none(id, user, customer, movie, devolution_date):
-                raise IncompleteParamsError
-            if param_is_not_a_string(id, user, customer, movie):
-                raise ParamIsNotStringError
-            if param_is_not_a_date(devolution_date):
-                raise ParamIsNotDateError(error_param=devolution_date)
+            data_user = (
+                session.query(UserEntity)
+                .filter(UserEntity.id == user_id)
+                .first()
+            )
+            if data_user is None:
+                raise IdNotFoundError(id=user_id)
+
+            data_customer = (
+                session.query(CustomerEntity)
+                .filter(CustomerEntity.id == customer_id)
+                .first()
+            )
+            if data_customer is None:
+                raise IdNotFoundError(id=customer_id)
+
+            data_movie = (
+                session.query(MovieEntity)
+                .filter(MovieEntity.id == movie_id)
+                .first()
+            )
+            if data_movie is None:
+                raise IdNotFoundError(id=movie_id)
 
             data_insert = RentEntity(
-                id=id,
-                user=user,
-                customer=customer,
-                movie=movie,
+                user_id=user_id,
+                customer_id=customer_id,
+                movie=movie_id,
                 devolution_date=devolution_date,
             )
             session.add(data_insert)
@@ -47,13 +66,13 @@ class Rent:
 
             return data_insert
 
-        except IncompleteParamsError as err:
-            session.rollback()
-            return err.message
-        except ParamIsNotStringError as err:
+        except ParamIsNotIntegerError as err:
             session.rollback()
             return err.message
         except ParamIsNotDateError as err:
+            session.rollback()
+            return err.message
+        except IdNotFoundError as err:
             session.rollback()
             return err.message
         finally:
