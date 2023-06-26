@@ -55,20 +55,17 @@ def test_insert():
     # Inserting fake rent registry
     rent_repository.insert(
         user_id=user_query[0].id,
-        customer_id=int(customer_query[0].id),
-        movie_id=int(movie_query[0].id),
+        customer_id=customer_query[0].id,
+        movie_id=movie_query[0].id,
         devolution_date=fake_devolution_date,
     )
     # Selecting fake rent registry
     rent_query = rent_repository.select(
         user_id=user_query[0].id,
-        customer_id=int(customer_query[0].id),
-        movie_id=int(movie_query[0].id),
+        customer_id=customer_query[0].id,
+        movie_id=movie_query[0].id,
         devolution_date=fake_devolution_date,
     )
-
-    print(f'query[0]: {rent_query[0].devolution_date}')
-    print(f'novo: {fake_devolution_date}')
 
     # Checking equalities
     assert rent_query[0].user_id == user_query[0].id
@@ -79,7 +76,7 @@ def test_insert():
     )
 
     # Cleaning DB
-    rent_repository.delete(id=(rent_query[0].id))
+    rent_repository.delete(id=rent_query[0].id)
     movie_repository.delete(id=movie_query[0].id)
     user_repository.delete(id=user_query[0].id)
     customer_repository.delete(id=customer_query[0].id)
@@ -96,19 +93,19 @@ def test_insert_ParamIsNotIntegerError():
     fake_not_int = fake.word()
 
     # Trying to insert a rent by passing a not integer as id
-    wrong_user_id = rent_repository.select(
+    wrong_user_id = rent_repository.insert(
         user_id=fake_not_int,
         customer_id=fake_customer_id,
         movie_id=fake_movie_id,
         devolution_date=fake_devolution_date,
     )
-    wrong_customer_id = rent_repository.select(
+    wrong_customer_id = rent_repository.insert(
         user_id=fake_user_id,
         customer_id=fake_not_int,
         movie_id=fake_movie_id,
         devolution_date=fake_devolution_date,
     )
-    wrong_movie_id = rent_repository.select(
+    wrong_movie_id = rent_repository.insert(
         user_id=fake_user_id,
         customer_id=fake_not_int,
         movie_id=fake_not_int,
@@ -133,7 +130,7 @@ def test_insert_ParamIsNotDateError():
     fake_devolution_date = fake.word()
 
     # Trying to insert a rent by passing a not date as devolution date
-    wrong_date = rent_repository.select(
+    wrong_date = rent_repository.insert(
         user_id=fake_user_id,
         customer_id=fake_customer_id,
         movie_id=fake_movie_id,
@@ -144,3 +141,22 @@ def test_insert_ParamIsNotDateError():
     assert (
         wrong_date == f'Error: Param "{fake_devolution_date}" must be a date'
     )
+
+
+def test_insert_IdNotFoundError():
+    # Setting a valid inputs values
+    fake_user_id = 0
+    fake_customer_id = 0
+    fake_movie_id = 0
+    fake_devolution_date = datetime.datetime(2025, 1, 15)
+
+    # Trying to insert a rent by passing a inexistent user_id
+    wrong_user_id = rent_repository.insert(
+        user_id=fake_user_id,
+        customer_id=fake_customer_id,
+        movie_id=fake_movie_id,
+        devolution_date=fake_devolution_date,
+    )
+
+    # Checking error
+    assert wrong_user_id == f'Error: Id "{fake_user_id}" not found'
