@@ -485,3 +485,13 @@ def test_delete_ParamIsNotIntegerError():
 
     # Checking error
     assert delete == f'Error: Param "{fake_wrong_id}" must be a integer'
+
+
+def test_delete_IdNotFoundError():
+    # Fake payload
+    fake_id = 0
+    # Trying to delete a registry passing an id that does not exist
+    delete = user_repository.delete(id=fake_id)
+
+    # Checking error
+    assert delete == f'Error: Id "{fake_id}" not found'
