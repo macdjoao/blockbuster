@@ -208,3 +208,13 @@ def test_select_ParamIsNotStringError():
         wrong_last_name_query
         == f'Error: Param "{fake_not_string_last_name}" must be a string'
     )
+
+
+def test_select_ParamIsNotBoolError():
+    # Setting a not boolean is_active
+    fake_not_bool_is_active = fake.word()
+    # Trying to select a customer by passing a not boolean as is_active
+    query = user_repository.select(is_active=fake_not_bool_is_active)
+
+    # Checking errors
+    assert query == f'Error: Param {fake_not_bool_is_active} must be a boolean'
