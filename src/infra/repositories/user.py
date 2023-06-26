@@ -190,20 +190,27 @@ class UserRepository:
         finally:
             session.close()
 
-    def delete(self, id: str):
+    def delete(self, id: int):
         try:
 
-            data_delete = (
+            if type(id) is not int:
+                raise ParamIsNotIntegerError(arg=id)
+            data_id = (
                 session.query(UserEntity).filter(UserEntity.id == id).first()
             )
+            if data_id is None:
+                raise IdNotFoundError(id=id)
 
             session.query(UserEntity).filter(UserEntity.id == id).delete()
             session.commit()
 
-            return data_delete
+            return data_id
 
-        except Exception as err:
+        except ParamIsNotIntegerError as err:
             session.rollback()
-            return err
+            return err.message
+        except IdNotFoundError as err:
+            session.rollback()
+            return err.message
         finally:
             session.close()
