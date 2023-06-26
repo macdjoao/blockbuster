@@ -379,3 +379,62 @@ def test_update_IdNotFoundError():
 
     # Checking error
     assert update == f'Error: Id "{fake_id}" not found'
+
+
+def test_update_EmailAlreadyRegisteredError():
+    # Fake payload
+    fake_email = fake.email()
+    fake_first_name = fake.first_name()
+    fake_last_name = fake.last_name()
+    fake_password = fake.word()
+    # Inserting fake registry
+    user_repository.insert(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        password=fake_password,
+    )
+
+    # Selecting fake registry
+    query = user_repository.select(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        is_active=True,
+    )
+
+    # Second fake payload
+    second_fake_email = fake.email()
+    second_fake_first_name = fake.first_name()
+    second_fake_last_name = fake.last_name()
+    second_fake_password = fake.word()
+    # Inserting second fake registry
+    user_repository.insert(
+        email=second_fake_email,
+        first_name=second_fake_first_name,
+        last_name=second_fake_last_name,
+        password=second_fake_password,
+    )
+
+    # Selecting second fake registry
+    second_query = user_repository.select(
+        email=second_fake_email,
+        first_name=second_fake_first_name,
+        last_name=second_fake_last_name,
+        is_active=True,
+    )
+
+    # Trying update second fake registry with a email that already exists (first payload's fake_email)
+    already_exists_email = user_repository.update(
+        id=second_query[0].id, email=fake_email
+    )
+
+    # Checking error
+    assert (
+        already_exists_email
+        == f'Error: Email "{fake_email}" is already registered'
+    )
+
+    # Cleaning DB
+    user_repository.delete(id=(query[0].id))
+    user_repository.delete(id=(second_query[0].id))
