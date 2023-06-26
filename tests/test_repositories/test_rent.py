@@ -83,3 +83,41 @@ def test_insert():
     movie_repository.delete(id=movie_query[0].id)
     user_repository.delete(id=user_query[0].id)
     customer_repository.delete(id=customer_query[0].id)
+
+
+def test_insert_ParamIsNotIntegerError():
+    # Setting a valid inputs values
+    fake_user_id = fake.random_digit()
+    fake_customer_id = fake.random_digit()
+    fake_movie_id = fake.random_digit()
+    fake_devolution_date = datetime.datetime(2025, 1, 15)
+
+    # Setting a not integer id
+    fake_not_int = fake.word()
+
+    # Trying to insert a rent by passing a not integer as id
+    wrong_user_id = rent_repository.select(
+        user_id=fake_not_int,
+        customer_id=fake_customer_id,
+        movie_id=fake_movie_id,
+        devolution_date=fake_devolution_date,
+    )
+    wrong_customer_id = rent_repository.select(
+        user_id=fake_user_id,
+        customer_id=fake_not_int,
+        movie_id=fake_movie_id,
+        devolution_date=fake_devolution_date,
+    )
+    wrong_movie_id = rent_repository.select(
+        user_id=fake_user_id,
+        customer_id=fake_not_int,
+        movie_id=fake_not_int,
+        devolution_date=fake_devolution_date,
+    )
+
+    # Checking error
+    assert wrong_user_id == f'Error: Param "{fake_not_int}" must be a integer'
+    assert (
+        wrong_customer_id == f'Error: Param "{fake_not_int}" must be a integer'
+    )
+    assert wrong_movie_id == f'Error: Param "{fake_not_int}" must be a integer'
