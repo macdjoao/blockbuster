@@ -1,3 +1,5 @@
+from typing import List
+
 from src.infra.configs.session import session
 from src.infra.entities.movie import Movie as MovieEntity
 from src.infra.repositories.errors.common import (IdNotFoundError,
@@ -7,7 +9,7 @@ from src.infra.repositories.errors.common import (IdNotFoundError,
 
 
 class MovieRepository:
-    def insert(self, name: str):
+    def insert(self, name: str) -> MovieEntity:
         try:
             if type(name) is not str:
                 raise ParamIsNotStringError(arg=name)
@@ -30,7 +32,7 @@ class MovieRepository:
         id: int = None,
         name: str = None,
         available: bool = None,
-    ):
+    ) -> List[MovieEntity]:
         try:
             custom_filter = session.query(MovieEntity)
 
@@ -68,7 +70,7 @@ class MovieRepository:
         id: int,
         name: str = None,
         available: bool = None,
-    ):
+    ) -> MovieEntity:
         try:
             if type(id) is not int:
                 raise ParamIsNotIntegerError(arg=id)
@@ -114,7 +116,7 @@ class MovieRepository:
         finally:
             session.close()
 
-    def delete(self, id: int):
+    def delete(self, id: int) -> MovieEntity:
         try:
 
             if type(id) is not int:

@@ -1,3 +1,5 @@
+from typing import List
+
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
 from src.infra.repositories.errors.common import (EmailAlreadyRegisteredError,
@@ -10,7 +12,7 @@ from src.infra.repositories.errors.common import (EmailAlreadyRegisteredError,
 class UserRepository:
     def insert(
         self, email: str, first_name: str, last_name: str, password: str
-    ):
+    ) -> UserEntity:
         try:
             if type(email) is not str:
                 raise ParamIsNotStringError(arg=email)
@@ -56,7 +58,7 @@ class UserRepository:
         first_name: str = None,
         last_name: str = None,
         is_active: bool = None,
-    ):
+    ) -> List[UserEntity]:
         try:
             custom_filter = session.query(UserEntity)
 
@@ -112,7 +114,7 @@ class UserRepository:
         last_name: str = None,
         password: str = None,
         is_active: bool = None,
-    ):
+    ) -> UserEntity:
         try:
             if type(id) is not int:
                 raise ParamIsNotIntegerError(arg=id)
@@ -190,7 +192,7 @@ class UserRepository:
         finally:
             session.close()
 
-    def delete(self, id: int):
+    def delete(self, id: int) -> UserEntity:
         try:
 
             if type(id) is not int:

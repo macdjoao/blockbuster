@@ -1,3 +1,5 @@
+from typing import List
+
 from src.infra.configs.session import session
 from src.infra.entities.customer import Customer as CustomerEntity
 from src.infra.repositories.errors.common import (EmailAlreadyRegisteredError,
@@ -10,7 +12,9 @@ customer_entity = CustomerEntity()
 
 
 class CustomerRepository:
-    def insert(self, email: str, first_name: str, last_name: str):
+    def insert(
+        self, email: str, first_name: str, last_name: str
+    ) -> CustomerEntity:
         try:
             if type(email) is not str:
                 raise ParamIsNotStringError(arg=email)
@@ -52,7 +56,7 @@ class CustomerRepository:
         first_name: str = None,
         last_name: str = None,
         is_active: bool = None,
-    ):
+    ) -> List[CustomerEntity]:
         try:
             custom_filter = session.query(CustomerEntity)
 
@@ -111,7 +115,7 @@ class CustomerRepository:
         first_name: str = None,
         last_name: str = None,
         is_active: bool = None,
-    ):
+    ) -> CustomerEntity:
 
         try:
             if type(id) is not int:
@@ -186,7 +190,7 @@ class CustomerRepository:
         finally:
             session.close()
 
-    def delete(self, id: int):
+    def delete(self, id: int) -> CustomerEntity:
         try:
             if type(id) is not int:
                 raise ParamIsNotIntegerError(arg=id)
