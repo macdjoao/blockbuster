@@ -179,7 +179,9 @@ def test_select_ParamIsNotBoolError():
     query = customer_repository.select(is_active=fake_not_bool_is_active)
 
     # Checking errors
-    assert query == f'Error: Param {fake_not_bool_is_active} must be a boolean'
+    assert (
+        query == f'Error: Param "{fake_not_bool_is_active}" must be a boolean'
+    )
 
 
 def test_update():
@@ -307,7 +309,7 @@ def test_update_ParamIsNotBoolError():
     # Checking errors
     assert (
         wrong__is_active
-        == f'Error: Param {not_boolean_value} must be a boolean'
+        == f'Error: Param "{not_boolean_value}" must be a boolean'
     )
 
     # Cleaning DB

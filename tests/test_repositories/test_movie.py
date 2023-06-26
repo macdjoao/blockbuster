@@ -85,7 +85,9 @@ def test_select_ParamIsNotBoolError():
     query = movie_repository.select(available=fake_not_bool_available)
 
     # Checking errors
-    assert query == f'Error: Param {fake_not_bool_available} must be a boolean'
+    assert (
+        query == f'Error: Param "{fake_not_bool_available}" must be a boolean'
+    )
 
 
 def test_update():
@@ -164,7 +166,7 @@ def test_update_ParamIsNotBoolError():
     # Checking errors
     assert (
         wrong_available
-        == f'Error: Param {not_boolean_value} must be a boolean'
+        == f'Error: Param "{not_boolean_value}" must be a boolean'
     )
 
     # Cleaning DB

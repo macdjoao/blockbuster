@@ -16,14 +16,14 @@ class ParamIsNotDateError(Exception):
     def __init__(self, arg) -> None:
         super().__init__()
         self.arg = arg
-        self.message = f'Error: Param {self.arg} must be a date'
+        self.message = f'Error: Param "{self.arg}" must be a date'
 
 
 class ParamIsNotBoolError(Exception):
     def __init__(self, arg) -> None:
         super().__init__()
         self.arg = arg
-        self.message = f'Error: Param {self.arg} must be a boolean'
+        self.message = f'Error: Param "{self.arg}" must be a boolean'
 
 
 class ParamAreNotRecognizedError(Exception):
