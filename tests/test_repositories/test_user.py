@@ -368,3 +368,14 @@ def test_update_ParamIsNotBoolError():
 
     # Cleaning DB
     user_repository.delete(id=(query[0].id))
+
+
+def test_update_IdNotFoundError():
+    # Fake payload
+    fake_id = 0
+    fake_last_name = fake.last_name()
+    # Trying to update a registry passing an id that does not exist
+    update = user_repository.update(id=fake_id, last_name=fake_last_name)
+
+    # Checking error
+    assert update == f'Error: Id "{fake_id}" not found'
