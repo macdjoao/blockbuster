@@ -1,6 +1,9 @@
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
 from src.infra.repositories.errors.general import (EmailAlreadyRegisteredError,
+                                                   IdNotFoundError,
+                                                   ParamIsNotBoolError,
+                                                   ParamIsNotIntegerError,
                                                    ParamIsNotStringError)
 
 
@@ -48,20 +51,38 @@ class UserRepository:
 
     def select(
         self,
-        id: str = None,
+        id: int = None,
         email: str = None,
-        name: str = None,
+        first_name: str = None,
+        last_name: str = None,
         is_active: bool = None,
     ):
         try:
             custom_filter = session.query(UserEntity)
+
             if id is not None:
+                if type(id) is not int:
+                    raise ParamIsNotIntegerError(arg=id)
                 custom_filter = custom_filter.filter(UserEntity.id == id)
             if email is not None:
+                if type(email) is not str:
+                    raise ParamIsNotStringError(arg=email)
                 custom_filter = custom_filter.filter(UserEntity.email == email)
-            if name is not None:
-                custom_filter = custom_filter.filter(UserEntity.name == name)
+            if first_name is not None:
+                if type(first_name) is not str:
+                    raise ParamIsNotStringError(arg=first_name)
+                custom_filter = custom_filter.filter(
+                    UserEntity.first_name == first_name
+                )
+            if last_name is not None:
+                if type(last_name) is not str:
+                    raise ParamIsNotStringError(arg=last_name)
+                custom_filter = custom_filter.filter(
+                    UserEntity.last_name == last_name
+                )
             if is_active is not None:
+                if type(is_active) is not bool:
+                    raise ParamIsNotBoolError(arg=is_active)
                 custom_filter = custom_filter.filter(
                     UserEntity.is_active == is_active
                 )
@@ -70,8 +91,12 @@ class UserRepository:
 
             return data_select
 
-        except Exception as err:
-            return err
+        except ParamIsNotIntegerError as err:
+            return err.message
+        except ParamIsNotStringError as err:
+            return err.message
+        except ParamIsNotBoolError as err:
+            return err.message
         finally:
             session.close()
 
