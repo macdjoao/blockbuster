@@ -1,41 +1,35 @@
-# import uuid
-
-# from passlib.context import CryptContext
-
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
-from src.infra.repositories.errors.general import (IncompleteParamsError,
+from src.infra.repositories.errors.general import (EmailAlreadyRegisteredError,
                                                    ParamIsNotStringError)
-from src.infra.repositories.utils.general import (param_is_not_a_string,
-                                                  params_is_none)
 
 
-class User:
+class UserRepository:
     def insert(
-        self,
-        id: str = None,
-        email: str = None,
-        name: str = None,
-        password: str = None,
+        self, email: str, first_name: str, last_name: str, password: str
     ):
-        # Trechos comentados devem ser implementados em services
-        # pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
         try:
-            # data_insert = UserEntity(
-            #     id=str(uuid.uuid1()),
-            #     email=email.lower(),
-            #     name=name.capitalize(),
-            #     password=pwd_context.hash(password),
-            # )
-            if params_is_none(id, email, name, password):
-                raise IncompleteParamsError
-            if param_is_not_a_string(id, email, name, password):
-                raise ParamIsNotStringError
+            if type(email) is not str:
+                raise ParamIsNotStringError(arg=email)
+            if type(first_name) is not str:
+                raise ParamIsNotStringError(arg=first_name)
+            if type(last_name) is not str:
+                raise ParamIsNotStringError(arg=last_name)
+            if type(password) is not str:
+                raise ParamIsNotStringError(arg=password)
+
+            data_email = (
+                session.query(UserEntity)
+                .filter(UserEntity.email == email)
+                .first()
+            )
+            if data_email is not None:
+                raise EmailAlreadyRegisteredError(email=email)
 
             data_insert = UserEntity(
-                id=id,
                 email=email,
-                name=name,
+                first_name=first_name,
+                last_name=last_name,
                 password=password,
             )
             session.add(data_insert)
@@ -43,10 +37,10 @@ class User:
 
             return data_insert
 
-        except IncompleteParamsError as err:
+        except ParamIsNotStringError as err:
             session.rollback()
             return err.message
-        except ParamIsNotStringError as err:
+        except EmailAlreadyRegisteredError as err:
             session.rollback()
             return err.message
         finally:
