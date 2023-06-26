@@ -1,9 +1,9 @@
 from src.infra.configs.session import session
 from src.infra.entities.movie import Movie as MovieEntity
-from src.infra.repositories.errors.general import (IdNotFoundError,
-                                                   ParamIsNotBoolError,
-                                                   ParamIsNotIntegerError,
-                                                   ParamIsNotStringError)
+from src.infra.repositories.errors.common import (IdNotFoundError,
+                                                  ParamIsNotBoolError,
+                                                  ParamIsNotIntegerError,
+                                                  ParamIsNotStringError)
 
 
 class MovieRepository:

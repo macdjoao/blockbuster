@@ -3,14 +3,10 @@ from typing import List
 
 from src.infra.configs.session import session
 from src.infra.entities.rent import Rent as RentEntity
-from src.infra.repositories.errors.general import (IdNotFoundError,
-                                                   IncompleteParamsError,
-                                                   ParamAreNotRecognizedError,
-                                                   ParamIsNotDateError,
-                                                   ParamIsNotStringError)
-from src.infra.repositories.utils.general import (
-    id_not_found, param_is_not_a_bool, param_is_not_a_date,
-    param_is_not_a_recognized_attribute, param_is_not_a_string, params_is_none)
+from src.infra.repositories.errors.common import (IdNotFoundError,
+                                                  ParamAreNotRecognizedError,
+                                                  ParamIsNotDateError,
+                                                  ParamIsNotStringError)
 
 
 class Rent:

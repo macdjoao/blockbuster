@@ -1,10 +1,10 @@
 from src.infra.configs.session import session
 from src.infra.entities.user import User as UserEntity
-from src.infra.repositories.errors.general import (EmailAlreadyRegisteredError,
-                                                   IdNotFoundError,
-                                                   ParamIsNotBoolError,
-                                                   ParamIsNotIntegerError,
-                                                   ParamIsNotStringError)
+from src.infra.repositories.errors.common import (EmailAlreadyRegisteredError,
+                                                  IdNotFoundError,
+                                                  ParamIsNotBoolError,
+                                                  ParamIsNotIntegerError,
+                                                  ParamIsNotStringError)
 
 
 class UserRepository:
