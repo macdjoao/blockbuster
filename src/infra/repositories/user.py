@@ -64,22 +64,26 @@ class UserRepository:
                 if type(id) is not int:
                     raise ParamIsNotIntegerError(arg=id)
                 custom_filter = custom_filter.filter(UserEntity.id == id)
+
             if email is not None:
                 if type(email) is not str:
                     raise ParamIsNotStringError(arg=email)
                 custom_filter = custom_filter.filter(UserEntity.email == email)
+
             if first_name is not None:
                 if type(first_name) is not str:
                     raise ParamIsNotStringError(arg=first_name)
                 custom_filter = custom_filter.filter(
                     UserEntity.first_name == first_name
                 )
+
             if last_name is not None:
                 if type(last_name) is not str:
                     raise ParamIsNotStringError(arg=last_name)
                 custom_filter = custom_filter.filter(
                     UserEntity.last_name == last_name
                 )
+
             if is_active is not None:
                 if type(is_active) is not bool:
                     raise ParamIsNotBoolError(arg=is_active)
