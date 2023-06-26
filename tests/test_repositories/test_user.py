@@ -65,6 +65,7 @@ def test_insert_EmailAlreadyRegisteredError():
 
     # Selecting fake registry for delete
     query = user_repository.select(email=fake_email)
+
     # Cleaning DB
     user_repository.delete(id=(query[0].id))
 
@@ -136,6 +137,7 @@ def test_select():
     fake_first_name = fake.first_name()
     fake_last_name = fake.last_name()
     fake_password = fake.word()
+
     # Inserting fake
     user_repository.insert(
         email=fake_email,
@@ -160,3 +162,14 @@ def test_select():
 
     # Cleaning DB
     user_repository.delete(id=(query[0].id))
+
+
+def test_select_ParamIsNotIntegerError():
+    # Setting a not integer id
+    fake_not_int_id = fake.word()
+
+    # Trying to select a customer by passing a not integer as id
+    query = user_repository.select(id=fake_not_int_id)
+
+    # Checking error
+    assert query == f'Error: Param "{fake_not_int_id}" must be a integer'
