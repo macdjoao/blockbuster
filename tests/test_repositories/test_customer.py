@@ -147,14 +147,14 @@ def test_select_ParamIsNotStringError():
     fake_not_string_first_name = fake.random_digit()
     # Trying to select a customer by passing a not string as first_name
     wrong_first_name_query = customer_repository.select(
-        email=fake_not_string_first_name
+        first_name=fake_not_string_first_name
     )
 
     # Setting a not string last_name
     fake_not_string_last_name = fake.random_digit()
     # Trying to select a customer by passing a not string as last_name
     wrong_last_name_query = customer_repository.select(
-        email=fake_not_string_last_name
+        last_name=fake_not_string_last_name
     )
 
     # Checking errors
