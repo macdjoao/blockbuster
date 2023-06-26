@@ -218,3 +218,46 @@ def test_select_ParamIsNotBoolError():
 
     # Checking errors
     assert query == f'Error: Param {fake_not_bool_is_active} must be a boolean'
+
+
+def test_update():
+    # Fake payload
+    fake_email = fake.email()
+    fake_first_name = fake.first_name()
+    fake_last_name = fake.last_name()
+    fake_password = fake.word()
+    # Inserting fake registry
+    user_repository.insert(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        password=fake_password,
+    )
+
+    # Selecting fake registry
+    query = user_repository.select(
+        email=fake_email,
+        first_name=fake_first_name,
+        last_name=fake_last_name,
+        is_active=True,
+    )
+
+    # Second fake payload
+    new_fake_first_name = fake.first_name()
+    new_fake_last_name = fake.last_name()
+    # Update fake registry with second fake payload parameters
+    user_repository.update(
+        id=query[0].id,
+        first_name=new_fake_first_name,
+        last_name=new_fake_last_name,
+    )
+
+    # Selecting updated fake registry
+    updated_query = user_repository.select(id=query[0].id)
+
+    # Check equalities
+    assert updated_query[0].first_name == new_fake_first_name
+    assert updated_query[0].last_name == new_fake_last_name
+
+    # Cleaning DB
+    user_repository.delete(id=(updated_query[0].id))
