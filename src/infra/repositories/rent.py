@@ -267,7 +267,7 @@ class RentRepository:
             )
 
             if data_delete is None:
-                raise IdNotFoundError(arg=id)
+                raise IdNotFoundError(id=id)
 
             session.query(RentEntity).filter(RentEntity.id == id).delete()
             session.commit()
