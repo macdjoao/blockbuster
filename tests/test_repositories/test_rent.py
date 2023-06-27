@@ -597,3 +597,13 @@ def test_delete_ParamIsNotIntegerError():
 
     # Checking error
     assert wrong_id == f'Error: Param "{fake_not_int}" must be a integer'
+
+
+def test_delete_IdNotFoundError():
+    # Setting a not existent id
+    fake_not_existent_id = 0
+    # Trying to delete fake rent registry by passing a not existent id
+    not_existent_id = rent_repository.delete(id=fake_not_existent_id)
+
+    # Checking error
+    assert not_existent_id == f'Error: Id "{fake_not_existent_id}" not found'
