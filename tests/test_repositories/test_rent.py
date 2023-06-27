@@ -540,3 +540,21 @@ def test_select():
     movie_repository.delete(id=movie_query[0].id)
     user_repository.delete(id=user_query[0].id)
     customer_repository.delete(id=customer_query[0].id)
+
+
+def test_select_ParamIsNotIntegerError():
+    # Setting a not integer value
+    fake_not_int = fake.word()
+    # Trying to select fake rent registry by passing a not integer values
+    wrong_id = rent_repository.select(id=fake_not_int)
+    wrong_user_id = rent_repository.select(user_id=fake_not_int)
+    wrong_customer_id = rent_repository.select(customer_id=fake_not_int)
+    wrong_movie_id = rent_repository.select(movie_id=fake_not_int)
+
+    # Checking errors
+    assert wrong_id == f'Error: Param "{fake_not_int}" must be a integer'
+    assert wrong_user_id == f'Error: Param "{fake_not_int}" must be a integer'
+    assert (
+        wrong_customer_id == f'Error: Param "{fake_not_int}" must be a integer'
+    )
+    assert wrong_movie_id == f'Error: Param "{fake_not_int}" must be a integer'
