@@ -295,27 +295,28 @@ def test_update_ParamIsNotIntegerError():
         devolution_date=fake_devolution_date,
     )
 
+    # Setting a not integer value
     fake_not_int = fake.word()
 
+    # Trying update rent with not integer values
     wrong_id = rent_repository.update(id=fake_not_int)
     wrong_user_id = rent_repository.update(
         id=rent_query[0].id, user_id=fake_not_int
     )
-    wrong_customer_id = rent_repository.update(
-        id=rent_query[0].id, customer_id=fake_not_int
-    )
     wrong_movie_id = rent_repository.update(
         id=rent_query[0].id, movie_id=fake_not_int
     )
-    # Updated query
+    wrong_customer_id = rent_repository.update(
+        id=rent_query[0].id, customer_id=fake_not_int
+    )
 
     # Checking errors
     assert wrong_id == f'Error: Param "{fake_not_int}" must be a integer'
     assert wrong_user_id == f'Error: Param "{fake_not_int}" must be a integer'
+    assert wrong_movie_id == f'Error: Param "{fake_not_int}" must be a integer'
     assert (
         wrong_customer_id == f'Error: Param "{fake_not_int}" must be a integer'
     )
-    assert wrong_movie_id == f'Error: Param "{fake_not_int}" must be a integer'
 
     # Cleaning DB
     rent_repository.delete(id=rent_query[0].id)
