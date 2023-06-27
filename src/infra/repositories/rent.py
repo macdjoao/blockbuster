@@ -152,46 +152,105 @@ class RentRepository:
         finally:
             session.close()
 
-    def update(self, id: str = None, **kwargs) -> RentEntity:
-        """
-        Args:
-            user (str)
-            customer (str)
-            movie (str)
-            devolution_date (datetime.datetime(YYYY, M, D))
-            finished (bool)
-        """
-        rent_entity = RentEntity()
+    def update(
+        self,
+        id: int,
+        user_id: int = None,
+        customer_id: int = None,
+        movie_id: int = None,
+        rent_date: date = None,
+        devolution_date: date = None,
+        finished: bool = None,
+    ) -> RentEntity:
         try:
-            if params_is_none(id):
-                raise IncompleteParamsError
-            if param_is_not_a_string(id):
-                raise ParamIsNotStringError
-            if id_not_found(session=session, object=RentEntity, arg=id):
+            if type(id) is not int:
+                raise ParamIsNotIntegerError(arg=id)
+            data_id = (
+                session.query(RentEntity).filter(RentEntity.id == id).first()
+            )
+            if data_id is None:
                 raise IdNotFoundError(id=id)
-            for kwarg in kwargs:
-                if param_is_not_a_recognized_attribute(
-                    object=rent_entity, arg=kwarg
-                ):
-                    raise ParamAreNotRecognizedError(error_param=kwarg)
-                session.query(RentEntity).filter(RentEntity.id == id).update(
-                    {f'{kwarg}': kwargs[f'{kwarg}']}
+
+            if user_id is not None:
+                if type(user_id) is not int:
+                    raise ParamIsNotIntegerError(arg=user_id)
+                data_user = (
+                    session.query(UserEntity)
+                    .filter(UserEntity.id == user_id)
+                    .first()
                 )
+                if data_user is None:
+                    raise IdNotFoundError(id=user_id)
+                session.query(RentEntity).filter(RentEntity.id == id).update(
+                    {'user_id': user_id}
+                )
+
+            if customer_id is not None:
+                if type(customer_id) is not int:
+                    raise ParamIsNotIntegerError(arg=customer_id)
+                data_customer = (
+                    session.query(CustomerEntity)
+                    .filter(CustomerEntity.id == customer_id)
+                    .first()
+                )
+                if data_customer is None:
+                    raise IdNotFoundError(id=customer_id)
+                session.query(RentEntity).filter(RentEntity.id == id).update(
+                    {'customer_id': customer_id}
+                )
+
+            if movie_id is not None:
+                if type(movie_id) is not int:
+                    raise ParamIsNotIntegerError(arg=movie_id)
+                data_movie = (
+                    session.query(MovieEntity)
+                    .filter(MovieEntity.id == movie_id)
+                    .first()
+                )
+                if data_movie is None:
+                    raise IdNotFoundError(id=movie_id)
+                session.query(RentEntity).filter(RentEntity.id == id).update(
+                    {'movie_id': movie_id}
+                )
+
+            if rent_date is not None:
+                if type(rent_date) is not datetime.datetime:
+                    raise ParamIsNotDateError(arg=rent_date)
+                session.query(RentEntity).filter(RentEntity.id == id).update(
+                    {'rent_date': rent_date}
+                )
+
+            if devolution_date is not None:
+                if type(devolution_date) is not datetime.datetime:
+                    raise ParamIsNotDateError(arg=devolution_date)
+                session.query(RentEntity).filter(RentEntity.id == id).update(
+                    {'devolution_date': devolution_date}
+                )
+
+            if finished is not None:
+                if type(finished) is not bool:
+                    raise ParamIsNotBoolError(arg=finished)
+                session.query(RentEntity).filter(RentEntity.id == id).update(
+                    {'finished': finished}
+                )
+
+            session.commit()
+
             data_update = (
                 session.query(RentEntity).filter(RentEntity.id == id).first()
             )
             return data_update
 
-        except IncompleteParamsError as err:
+        except ParamIsNotIntegerError as err:
             session.rollback()
             return err.message
-        except ParamIsNotStringError as err:
+        except ParamIsNotDateError as err:
+            session.rollback()
+            return err.message
+        except ParamIsNotBoolError as err:
             session.rollback()
             return err.message
         except IdNotFoundError as err:
-            session.rollback()
-            return err.message
-        except ParamAreNotRecognizedError as err:
             session.rollback()
             return err.message
         finally:
