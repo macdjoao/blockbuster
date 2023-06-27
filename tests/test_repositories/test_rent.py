@@ -558,3 +558,20 @@ def test_select_ParamIsNotIntegerError():
         wrong_customer_id == f'Error: Param "{fake_not_int}" must be a integer'
     )
     assert wrong_movie_id == f'Error: Param "{fake_not_int}" must be a integer'
+
+
+def test_select_ParamIsNotDateError():
+    # Setting a not date value
+    fake_not_date = fake.random_digit()
+    # Trying to select fake rent registry by passing a not date values
+    wrong_rent_date = rent_repository.select(rent_date=fake_not_date)
+    wrong_devolution_date = rent_repository.select(
+        devolution_date=fake_not_date
+    )
+
+    # Checking errors
+    assert wrong_rent_date == f'Error: Param "{fake_not_date}" must be a date'
+    assert (
+        wrong_devolution_date
+        == f'Error: Param "{fake_not_date}" must be a date'
+    )
