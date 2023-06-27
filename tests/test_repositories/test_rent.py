@@ -237,5 +237,6 @@ def test_update():
     # Cleaning DB
     rent_repository.delete(id=updated_rent_query[0].id)
     movie_repository.delete(id=movie_query[0].id)
+    movie_repository.delete(id=second_movie_query[0].id)
     user_repository.delete(id=user_query[0].id)
     customer_repository.delete(id=customer_query[0].id)
