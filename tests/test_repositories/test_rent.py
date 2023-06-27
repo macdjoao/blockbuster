@@ -575,3 +575,15 @@ def test_select_ParamIsNotDateError():
         wrong_devolution_date
         == f'Error: Param "{fake_not_date}" must be a date'
     )
+
+
+def test_select_ParamIsNotBoolError():
+    # Setting a not boolean value
+    fake_not_bool = fake.word()
+    # Trying to select fake rent registry by passing a not bool value
+    wrong_finished = rent_repository.select(finished=fake_not_bool)
+
+    # Checking error
+    assert (
+        wrong_finished == f'Error: Param "{fake_not_bool}" must be a boolean'
+    )
