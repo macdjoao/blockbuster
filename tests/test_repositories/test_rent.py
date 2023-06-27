@@ -587,3 +587,13 @@ def test_select_ParamIsNotBoolError():
     assert (
         wrong_finished == f'Error: Param "{fake_not_bool}" must be a boolean'
     )
+
+
+def test_delete_ParamIsNotIntegerError():
+    # Setting a not integer value
+    fake_not_int = fake.word()
+    # Trying to delete fake rent registry by passing a not integer values
+    wrong_id = rent_repository.delete(id=fake_not_int)
+
+    # Checking error
+    assert wrong_id == f'Error: Param "{fake_not_int}" must be a integer'
